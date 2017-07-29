@@ -112,10 +112,93 @@ DataEntradaEquip DATE,
 CONSTRAINT equipamento_pk primary key(Cod_Equipamento)
 );
 
-#TABELA COMPUTADOR
-#CREATE TABLE computador(
 
 
+alter table equipamento
+	add IP_Rede VARCHAR(12);
+
+alter table equipamento
+	add Mask_Rede VARCHAR(12);
+
+
+#Adicionando Num_Serie a equipamento.
+alter table equipamento
+	add Num_Serie VARCHAR(11);
+
+#Criando tabela computador
+#computador cliente pode não ter IP fixo. Então foi colocado só o IP da rede.
+CREATE TABLE computador(
+Cod_Equipamento VARCHAR(8),
+IP_Rede  VARCHAR(12),
+Sist_OP VARCHAR(30),
+Setor VARCHAR(20),
+CONSTRAINT computador_pk primary key(Cod_Equipamento),
+CONSTRAINT computador_equipamento_fk foreign key(Cod_Equipamento) references equipamento(Cod_Equipamento) 
+);
+
+#Dropando Setor, pois já existe na tabela euiqpamento.
+ALTER TABLE computador
+	drop Setor;
+
+#Dropando IP_Rede
+#Foi adicionado a Equipamento    
+ALTER TABLE computador
+	drop IP_Rede;
+    
+#Adicionando máscara de rede à computador    
+ALTER TABLE computador
+	add Mask_Rede VARCHAR(12);
+ 
+#Dropando máscara de rede. Foi adicionada a Equipamento. 
+ALTER TABLE computador
+	drop Mask_Rede;
+
+CREATE TABLE servidor(
+Cod_Equipamento VARCHAR(8),
+IP VARCHAR(12),
+CONSTRAINT servidor_pk primary key(Cod_Equipamento),
+CONSTRAINT sevidor_computador_fk foreign key(Cod_Equipamento) references computador(Cod_Equipamento)
+);
+
+#Criando tabela cliente
+CREATE TABLE cliente(
+COD VARCHAR(7),
+Prioridade ENUM('Alta', 'Media', 'Baixa'),
+Endereco VARCHAR(100),
+UF_Estado VARCHAR(2),
+CONSTRAINT cliente_pk primary key(COD)
+);
+
+#Criando tabela cliente_fisico
+CREATE TABLE cliente_fisico(
+Cod_Cliente VARCHAR(7),
+CPF VARCHAR(11) UNIQUE,
+Nome VARCHAR(50),
+CONSTRAINT cliente_fisico_pk primary key(Cod_Cliente),
+CONSTRAINT cliente_fisico_cliente_fk foreign key(Cod_Cliente) references cliente(COD)
+);
+
+#Criando tabela cliente_jur
+CREATE TABLE cliente_jur(
+Cod_Cliente VARCHAR(7),
+CNPJ VARCHAR(14),
+CONSTRAINT cliente_jur_pk primary key(Cod_Cliente),
+CONSTRAINT cliente_jur_fk foreign key(Cod_Cliente) references cliente(COD)
+);
+
+ALTER TABLE cliente_jur
+	CHANGE CNPJ CNPJ VARCHAR(14) UNIQUE NOT NULL,
+	ADD Razao_Social VARCHAR(50);
+
+#Criando tabela cliente_contato
+CREATE TABLE cliente_contato(
+Cod_Cliente VARCHAR(7),
+Fone VARCHAR(12),
+Celular VARCHAR(13),
+Email VARCHAR(30),
+CONSTRAINT cliente_contato_pk primary key(Cod_Cliente),
+CONSTRAINT cliente_contato_cliente_fk foreign key(Cod_Cliente) references cliente(COD)
+);
 
 #TABELA ORDEM DE SERVICO
 CREATE TABLE ordem_de_servico(
@@ -129,6 +212,12 @@ CONSTRAINT ordem_de_servico_pk primary key(Num_OS),
 CONSTRAINT ordem_de_servico_fk foreign key(CodOrcamento) references orcamento(CodOrcamento)
 );
 
+#Alterando tabela ordem Prazo em dias de Date para SMALLINT valor máximo: 32767
+ALTER table ordem_de_servico
+	CHANGE PrazoEmDiasOS Prazo_EmDias_OS SMALLINT;
+    
+ALTER table ordem_de_servico
+	add 
 
 #TABELA ORCAMENTO
 CREATE TABLE orcamento(
@@ -139,6 +228,14 @@ DtEmissao_Orcto DATE,
 ValidadeEmDias_Orcto DATE,
 UltimaData_Orcto DATE,
 CONSTRAINT orcamento_pk primary key(CodOrcamento));
+
+CREATE TABLE fatura(
+COD VARCHAR(10),
+Status ENUM('A Pagar', 'Paga'),
+NUM_PARCELAS SMALLINT,
+Valor_Total MEDIUMINT,
+CONSTRAINT fatura_pk primary key(COD)
+
 
 #adicionando coluna 
 ALTER TABLE orcamento ADD Num_OS VARCHAR(10);
@@ -160,6 +257,10 @@ Email VARCHAR(12),
 Carga_hora INTEGER(10),
 CONSTRAINT funcionario_pk primary key(Matricula)
 );
+
+#Alterando Cpf para Varchar, pois o Integer não permitiria números muito grandes. 0 - 9 para cada dígito.
+ALTER TABLE funcionario
+	CHANGE Cpf Cpf VARCHAR(9);
 
 #Criando tabela supervisor
 CREATE TABLE supervisor(
