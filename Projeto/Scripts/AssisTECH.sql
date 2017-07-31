@@ -156,6 +156,23 @@ CONSTRAINT computador_pk primary key(Cod_Equipamento),
 CONSTRAINT computador_equipamento_fk foreign key(Cod_Equipamento) references equipamento(Cod_Equipamento) 
 );
 
+#CREATE TABLE 
+
+
+CREATE TABLE HISTORICO_MANUTENCAO(
+Dta_Abertura VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE MANUTENCAO(
+Dta_Inicio VARCHAR(128) NOT NULL,
+Dta_Fim VARCHAR(128) NOT NULL,
+Garantia VARCHAR(128) NOT NULL
+);
+
+
+ALTER TABLE MANUTENCAO ADD Dta_Abertura  NOT NULL;
+ALTER TABLE MANUTENCAO ADD CONSTRAINT FK_MANUTENCAO FOREIGN KEY (_) REFERENCES  ();
+
 #Dropando Setor, pois já existe na tabela euiqpamento.
 ALTER TABLE computador
 	drop Setor;

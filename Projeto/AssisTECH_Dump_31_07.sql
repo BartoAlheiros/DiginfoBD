@@ -27,8 +27,11 @@ DROP TABLE IF EXISTS `adm_financeiro`;
 CREATE TABLE `adm_financeiro` (
   `Matricula` varchar(10) NOT NULL DEFAULT '',
   `Cod_Contracheque` varchar(14) DEFAULT NULL,
+  `Cod_Desp_Viag` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`Matricula`),
   KEY `adm_fincanceiro_contracheque` (`Cod_Contracheque`),
+  KEY `adm_financeiro_desp_viag_fk` (`Cod_Desp_Viag`),
+  CONSTRAINT `adm_financeiro_desp_viag_fk` FOREIGN KEY (`Cod_Desp_Viag`) REFERENCES `despesa_viagem` (`COD`),
   CONSTRAINT `adm_financeiro_funcionario_fk` FOREIGN KEY (`Matricula`) REFERENCES `funcionario` (`Matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -40,6 +43,32 @@ CREATE TABLE `adm_financeiro` (
 LOCK TABLES `adm_financeiro` WRITE;
 /*!40000 ALTER TABLE `adm_financeiro` DISABLE KEYS */;
 /*!40000 ALTER TABLE `adm_financeiro` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `almoxarifado`
+--
+
+DROP TABLE IF EXISTS `almoxarifado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `almoxarifado` (
+  `COD_ID` varchar(14) NOT NULL,
+  `Qtd_total` int(11) DEFAULT NULL,
+  `Entrada_mes` date DEFAULT NULL,
+  `Saida_mes` date DEFAULT NULL,
+  `Descricao` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`COD_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `almoxarifado`
+--
+
+LOCK TABLES `almoxarifado` WRITE;
+/*!40000 ALTER TABLE `almoxarifado` DISABLE KEYS */;
+/*!40000 ALTER TABLE `almoxarifado` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -63,6 +92,29 @@ CREATE TABLE `atendente_solucionador_direcionador` (
 LOCK TABLES `atendente_solucionador_direcionador` WRITE;
 /*!40000 ALTER TABLE `atendente_solucionador_direcionador` DISABLE KEYS */;
 /*!40000 ALTER TABLE `atendente_solucionador_direcionador` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categoria`
+--
+
+DROP TABLE IF EXISTS `categoria`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categoria` (
+  `Cod_categoria` varchar(15) NOT NULL,
+  `Descricao` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`Cod_categoria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categoria`
+--
+
+LOCK TABLES `categoria` WRITE;
+/*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -200,15 +252,18 @@ DROP TABLE IF EXISTS `contracheque`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contracheque` (
-  `Matricula_Admin_Financeiro` varchar(10) DEFAULT NULL,
   `Codigo` varchar(14) NOT NULL DEFAULT '',
+  `Matricula_Admin_Financeiro` varchar(10) NOT NULL,
+  `Mat_Funcionario` varchar(10) NOT NULL,
   `Data_Contracheque` date DEFAULT NULL,
   `Horas_extras` int(10) DEFAULT NULL,
   `Salario_Base` int(9) DEFAULT NULL,
   `Adicional_Salario` int(9) DEFAULT NULL,
   PRIMARY KEY (`Codigo`),
   KEY `contracheque_admin_fincanceiro_fk_idx` (`Matricula_Admin_Financeiro`),
-  CONSTRAINT `contracheque_admin_financeiro_fk` FOREIGN KEY (`Matricula_Admin_Financeiro`) REFERENCES `adm_financeiro` (`Matricula`)
+  KEY `contracheque_func_fk` (`Mat_Funcionario`),
+  CONSTRAINT `contracheque_admin_financeiro_fk` FOREIGN KEY (`Matricula_Admin_Financeiro`) REFERENCES `adm_financeiro` (`Matricula`),
+  CONSTRAINT `contracheque_func_fk` FOREIGN KEY (`Mat_Funcionario`) REFERENCES `funcionario` (`Matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -278,6 +333,29 @@ CREATE TABLE `dependente` (
 LOCK TABLES `dependente` WRITE;
 /*!40000 ALTER TABLE `dependente` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dependente` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `despesa_viagem`
+--
+
+DROP TABLE IF EXISTS `despesa_viagem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `despesa_viagem` (
+  `COD` varchar(10) NOT NULL,
+  `Valor` mediumint(9) NOT NULL,
+  PRIMARY KEY (`COD`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `despesa_viagem`
+--
+
+LOCK TABLES `despesa_viagem` WRITE;
+/*!40000 ALTER TABLE `despesa_viagem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `despesa_viagem` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -367,6 +445,84 @@ LOCK TABLES `equipamento` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `estante`
+--
+
+DROP TABLE IF EXISTS `estante`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `estante` (
+  `COD` int(11) NOT NULL,
+  `COD_ID_Almoxarif` varchar(10) NOT NULL,
+  `Descric` varchar(30) NOT NULL,
+  PRIMARY KEY (`COD`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `estante`
+--
+
+LOCK TABLES `estante` WRITE;
+/*!40000 ALTER TABLE `estante` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estante` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fornece`
+--
+
+DROP TABLE IF EXISTS `fornece`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fornece` (
+  `Cnpj_fornecedor` varchar(10) NOT NULL,
+  `Cod_insumo` varchar(10) NOT NULL,
+  `Dta` varchar(15) NOT NULL,
+  `Valor_unit` varchar(15) NOT NULL,
+  PRIMARY KEY (`Cnpj_fornecedor`,`Cod_insumo`),
+  KEY `fornece_fk` (`Cod_insumo`),
+  CONSTRAINT `fornece_fk` FOREIGN KEY (`Cod_insumo`) REFERENCES `insumo` (`Cod_Insumo`),
+  CONSTRAINT `fornece_fornecedor_fk` FOREIGN KEY (`Cnpj_fornecedor`) REFERENCES `fornecedor` (`Cnpj_fornecedor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fornece`
+--
+
+LOCK TABLES `fornece` WRITE;
+/*!40000 ALTER TABLE `fornece` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fornece` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fornecedor`
+--
+
+DROP TABLE IF EXISTS `fornecedor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fornecedor` (
+  `Cnpj_fornecedor` varchar(10) NOT NULL,
+  `Telefone` int(11) DEFAULT NULL,
+  `Razao` varchar(20) DEFAULT NULL,
+  `Endereco` varchar(30) DEFAULT NULL,
+  `Email` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`Cnpj_fornecedor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fornecedor`
+--
+
+LOCK TABLES `fornecedor` WRITE;
+/*!40000 ALTER TABLE `fornecedor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fornecedor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `funcionario`
 --
 
@@ -375,9 +531,10 @@ DROP TABLE IF EXISTS `funcionario`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `funcionario` (
   `Matricula` varchar(10) NOT NULL DEFAULT '',
+  `Cod_Unid_Sup` varchar(15) NOT NULL,
+  `Id_Jornada_Trabalho` varchar(8) NOT NULL,
   `Cod_Contracheque` varchar(10) DEFAULT NULL,
   `Sequencial_Dependente` varchar(12) DEFAULT NULL,
-  `Id_Jornada_Trabalho` varchar(8) DEFAULT NULL,
   `Login` varchar(15) DEFAULT NULL,
   `Senha` varchar(8) DEFAULT NULL,
   `Nome` varchar(15) DEFAULT NULL,
@@ -386,8 +543,8 @@ CREATE TABLE `funcionario` (
   `Carga_hora` int(10) DEFAULT NULL,
   PRIMARY KEY (`Matricula`),
   KEY `funcionario_jornada_trabalho_fk` (`Id_Jornada_Trabalho`),
-  KEY `funcionario_contracheque_fk` (`Cod_Contracheque`),
-  CONSTRAINT `funcionario_contracheque_fk` FOREIGN KEY (`Cod_Contracheque`) REFERENCES `contracheque` (`Codigo`),
+  KEY `func_unidade_de_sup_fk` (`Cod_Unid_Sup`),
+  CONSTRAINT `func_unidade_de_sup_fk` FOREIGN KEY (`Cod_Unid_Sup`) REFERENCES `unidade_de_suporte` (`COD`),
   CONSTRAINT `funcionario_jornada_trabalho_fk` FOREIGN KEY (`Id_Jornada_Trabalho`) REFERENCES `jornada_trabalho` (`ID_Jornada_Trabalho`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -399,6 +556,65 @@ CREATE TABLE `funcionario` (
 LOCK TABLES `funcionario` WRITE;
 /*!40000 ALTER TABLE `funcionario` DISABLE KEYS */;
 /*!40000 ALTER TABLE `funcionario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `insumo`
+--
+
+DROP TABLE IF EXISTS `insumo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `insumo` (
+  `Cod_Insumo` varchar(15) NOT NULL,
+  `Descri` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`Cod_Insumo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `insumo`
+--
+
+LOCK TABLES `insumo` WRITE;
+/*!40000 ALTER TABLE `insumo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `insumo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `item_estoque`
+--
+
+DROP TABLE IF EXISTS `item_estoque`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_estoque` (
+  `Sequencial_insumo` varchar(16) NOT NULL,
+  `Cod_insumo` varchar(15) NOT NULL,
+  `Data_entrada` date DEFAULT NULL,
+  `Data_final` date DEFAULT NULL,
+  `Data_valida` date DEFAULT NULL,
+  `Preco_compra` varchar(14) DEFAULT NULL,
+  `Qtd_minima` int(11) DEFAULT NULL,
+  `Qtd_atual` int(11) DEFAULT NULL,
+  `Cod_Estante` int(11) DEFAULT NULL,
+  `Cod_Almoxarif` varchar(14) NOT NULL,
+  PRIMARY KEY (`Cod_insumo`,`Sequencial_insumo`),
+  KEY `item_estoq_estante_fk` (`Cod_Estante`),
+  KEY `item_estoq_almoxarif_fk` (`Cod_Almoxarif`),
+  CONSTRAINT `insumo_fk` FOREIGN KEY (`Cod_insumo`) REFERENCES `insumo` (`Cod_Insumo`),
+  CONSTRAINT `item_estoq_almoxarif_fk` FOREIGN KEY (`Cod_Almoxarif`) REFERENCES `almoxarifado` (`COD_ID`),
+  CONSTRAINT `item_estoq_estante_fk` FOREIGN KEY (`Cod_Estante`) REFERENCES `estante` (`COD`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `item_estoque`
+--
+
+LOCK TABLES `item_estoque` WRITE;
+/*!40000 ALTER TABLE `item_estoque` DISABLE KEYS */;
+/*!40000 ALTER TABLE `item_estoque` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -659,6 +875,32 @@ LOCK TABLES `tipo_contrato` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tipo_despesa`
+--
+
+DROP TABLE IF EXISTS `tipo_despesa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tipo_despesa` (
+  `ID` varchar(7) NOT NULL,
+  `Cod_Despesa` varchar(10) NOT NULL,
+  `dsc` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `tipo_despesa_desp_viag_fk` (`Cod_Despesa`),
+  CONSTRAINT `tipo_despesa_desp_viag_fk` FOREIGN KEY (`Cod_Despesa`) REFERENCES `despesa_viagem` (`COD`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tipo_despesa`
+--
+
+LOCK TABLES `tipo_despesa` WRITE;
+/*!40000 ALTER TABLE `tipo_despesa` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tipo_despesa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `unidade_de_suporte`
 --
 
@@ -666,15 +908,15 @@ DROP TABLE IF EXISTS `unidade_de_suporte`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `unidade_de_suporte` (
-  `CNPJ_Empresa` int(14) NOT NULL,
-  `Estado` varchar(10) DEFAULT NULL,
-  `UF` varchar(2) DEFAULT NULL,
-  `Endereço` varchar(30) DEFAULT NULL,
-  `Nome` varchar(15) DEFAULT NULL,
-  `Matriz` varchar(20) DEFAULT NULL,
+  `CNPJ_Empresa` varchar(14) NOT NULL,
+  `COD` varchar(15) NOT NULL,
+  `Estado` varchar(10) NOT NULL,
+  `UF` varchar(2) NOT NULL,
   `RazaoSocial` varchar(20) NOT NULL,
-  PRIMARY KEY (`CNPJ_Empresa`),
-  CONSTRAINT `CNPJ_unidade_de_suporte_fk` FOREIGN KEY (`CNPJ_Empresa`) REFERENCES `empresa` (`CNPJ`) ON DELETE CASCADE ON UPDATE CASCADE
+  `Endereço` varchar(30) NOT NULL,
+  `Nome` varchar(15) DEFAULT NULL,
+  `Matriz` varchar(20) NOT NULL,
+  PRIMARY KEY (`COD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -696,4 +938,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-28 21:41:27
+-- Dump completed on 2017-07-31 15:55:44

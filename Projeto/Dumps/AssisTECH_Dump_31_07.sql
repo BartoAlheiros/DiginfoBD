@@ -420,12 +420,13 @@ DROP TABLE IF EXISTS `equipamento`;
 CREATE TABLE `equipamento` (
   `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
   `Cod_Contrato` varchar(5) DEFAULT NULL,
-  `Status` enum('Bom','Regular','Ruim') DEFAULT NULL,
-  `Fabricante` varchar(30) DEFAULT NULL,
+  `Fabricante` varchar(30) NOT NULL,
+  `Modelo` varchar(30) NOT NULL,
+  `Status` enum('Bom','Regular','Ruim') NOT NULL,
   `Historico` varchar(40) DEFAULT NULL,
-  `Descricao` varchar(50) DEFAULT NULL,
-  `Setor` varchar(20) DEFAULT NULL,
-  `DataEntrada` date DEFAULT NULL,
+  `Descricao` varchar(50) NOT NULL,
+  `Setor` varchar(20) NOT NULL,
+  `DataEntrada` date NOT NULL,
   `Num_Serie` varchar(11) DEFAULT NULL,
   `IP_Rede` varchar(12) DEFAULT NULL,
   `Mask_Rede` varchar(12) DEFAULT NULL,
@@ -737,10 +738,11 @@ DROP TABLE IF EXISTS `supervisao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supervisao` (
-  `Data_inicio` date DEFAULT NULL,
   `Matricula_supervisor` varchar(10) NOT NULL DEFAULT '',
   `Matricula_supervisionado` varchar(10) NOT NULL DEFAULT '',
+  `Data_inicio` date DEFAULT NULL,
   PRIMARY KEY (`Matricula_supervisor`,`Matricula_supervisionado`),
+  UNIQUE KEY `Matricula_supervisor_UNIQUE` (`Matricula_supervisor`),
   KEY `supervisao_supervisionado_fk` (`Matricula_supervisionado`),
   CONSTRAINT `supervisao_supervisionado_fk` FOREIGN KEY (`Matricula_supervisionado`) REFERENCES `funcionario` (`Matricula`),
   CONSTRAINT `supervisao_supervisor_fk` FOREIGN KEY (`Matricula_supervisor`) REFERENCES `funcionario` (`Matricula`)
@@ -938,4 +940,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-31 15:55:44
+-- Dump completed on 2017-07-31 20:16:01
