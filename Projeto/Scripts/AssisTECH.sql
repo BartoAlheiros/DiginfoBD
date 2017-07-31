@@ -477,6 +477,12 @@ CONSTRAINT fornece_pk primary key(Cnpj_fornecedor, Cod_insumo),
 CONSTRAINT fornece_fk foreign key(Cod_insumo) references insumo(Cod_insumo)
 );
 
+
+ALTER TABLE fornece
+	add constraint fornece_fornecedor_fk foreign key(Cnpj_fornecedor) 
+    references fornecedor(Cnpj_fornecedor);
+
+
 CREATE TABLE categoria(
 Cod_categoria VARCHAR(15),
 Descricao VARCHAR(12),

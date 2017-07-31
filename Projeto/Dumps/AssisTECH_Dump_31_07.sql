@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `assistech` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `assistech`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: assistech
 -- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -476,14 +476,14 @@ DROP TABLE IF EXISTS `fornece`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fornece` (
-  `Dt_inicio` varchar(15) DEFAULT NULL,
-  `Dt_fim` varchar(15) DEFAULT NULL,
-  `Valor_unit` varchar(15) DEFAULT NULL,
   `Cnpj_fornecedor` varchar(10) NOT NULL,
   `Cod_insumo` varchar(10) NOT NULL,
+  `Dta` varchar(15) NOT NULL,
+  `Valor_unit` varchar(15) NOT NULL,
   PRIMARY KEY (`Cnpj_fornecedor`,`Cod_insumo`),
   KEY `fornece_fk` (`Cod_insumo`),
-  CONSTRAINT `fornece_fk` FOREIGN KEY (`Cod_insumo`) REFERENCES `insumo` (`Cod_Insumo`)
+  CONSTRAINT `fornece_fk` FOREIGN KEY (`Cod_insumo`) REFERENCES `insumo` (`Cod_Insumo`),
+  CONSTRAINT `fornece_fornecedor_fk` FOREIGN KEY (`Cnpj_fornecedor`) REFERENCES `fornecedor` (`Cnpj_fornecedor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -938,4 +938,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-31 11:51:59
+-- Dump completed on 2017-07-31 15:55:44
