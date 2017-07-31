@@ -22,15 +22,6 @@ alter table unidade_de_suporte change CNPJ CNPJ INTEGER(14);
 alter table unidade_de_suporte add RazãoSocial VARCHAR(20);
 alter table unidade_de_suporte change RazãoSocial RazaoSocial VARCHAR(20);
 
-#A chave primária CNPJ de unidade_de_suporte foi alterada para VARCHAR(14) utilizando o editor do workbench.
-#motivo: inteiro pode dar problema apra números muito grandes.
-
-#Alterando a tabela unidade_de_suporte
-ALTER TABLE unidade_de_suporte
-	add COD VARCHAR(15),
-    drop primary key,
-    add constraint unidade_suporte_pk primary key(CNPJ_Empresa, COD);
-
 ALTER TABLE unidade_de_suporte
 CHANGE COLUMN RazaoSocial RazaoSocial VARCHAR(20) NOT NULL ,
 DROP PRIMARY KEY,
@@ -60,14 +51,6 @@ ADD CONSTRAINT CNPJ_empresa_fk
   ON UPDATE CASCADE;
   
 #agora há um caminho entre empresa e unidade_de_suporte e vice-versa
-
-CREATE TABLE insumo(
-Qtde VARCHAR(15),
-CONSTRAINT insumo_pk primary key(Cod_insumo)
-);
-
-CREATE TABLE solict_insumo(
-
 
 #TABELA CONTRATO
 CREATE TABLE contrato(
@@ -116,9 +99,6 @@ ID_Tipo_Contrato varchar(5),
 Descrição Varchar(30),
 CONSTRAINT tipo_contrato_pk primary key(ID_Tipo_Contrato)
 );
-
-ALTER TABLE tipo_contrato
-	change ID_Tipo_Contrato ID_Tipo_Contrato VARCHAR(10);
 
 #TABELA EQUIPAMENTO
 CREATE TABLE equipamento(
@@ -282,15 +262,6 @@ CONSTRAINT funcionario_pk primary key(Matricula)
 ALTER TABLE funcionario
 	CHANGE Cpf Cpf VARCHAR(9);
 
-#Atribuindo chave estrangeira Codigo da unidade de suporte a funcionário.
-ALTER TABLE funcionario
-	add Cod_Unid_Sup VARCHAR(15),
-	add constraint func_unidade_de_sup_fk foreign key(Cod_Unid_Sup) references unidade_de_suporte(COD);
-
-ALTER TABLE funcionario
-	change Cod_Unid_Sup Cod_Unid_Sup VARCHAR(15) NOT NULL;
-        
-
 #Criando tabela supervisor
 CREATE TABLE supervisor(
 Matricula_funcionario VARCHAR(10),
@@ -328,9 +299,6 @@ Matricula_funcionario VARCHAR(10),
 CONSTRAINT funcionario_pk primary key(Matricula_funcionario),
 CONSTRAINT atendente_solucionador_direcionador_funcionario_fk foreign key(Matricula_funcionario) references funcionario(Matricula)
 );
-
-ALTER TABLE atendente_solucionador_direcionador
-	ADD CONSTRAINT atend_solu_dir_chamado_fk foreign key(No_Chamado) references chamado(No_Seq);
 
 #Criando tabela kpi
 CREATE TABLE kpi(
@@ -379,10 +347,6 @@ Adicional_Salario INTEGER(9),
 CONSTRAINT contracheque_pk primary key(Codigo)
 );
 
-ALTER TABLE contracheque
-	add Mat_Funcionario VARCHAR(10) NOT NULL,
-	add constraint contracheque_func_fk foreign key(Mat_Funcionario) references funcionario(Matricula);
-    
 CREATE TABLE jornada_trabalho( 
 ID_Jornada_Trabalho VARCHAR(8), 
 Horario_Inicio INTEGER, 
@@ -414,144 +378,4 @@ ALTER TABLE contracheque
     
 ALTER TABLE adm_financeiro
 	DROP foreign key adm_fincanceiro_contracheque;
-  
-#Criando o relacionamento 1:N de adm_financeiro com despesa_viagem.  
-ALTER TABLE adm_financeiro
-	add Cod_Desp_Viag VARCHAR(10),
-    ADD CONSTRAINT adm_financeiro_desp_viag_fk foreign key(Cod_Desp_Viag) 
-    references despesa_viagem(COD);
     
-CREATE TABLE despesa_viagem(
-COD VARCHAR(10),
-VALOR MEDIUMINT,
-CONSTRAINT despesa_viagem_pk primary key(COD)
-);
-
-ALTER TABLE despesa_viagem
-	change VALOR Valor MEDIUMINT NOT NULL;
-    
-CREATE TABLE tipo_despesa(
-ID VARCHAR(7),
-Cod_Despesa VARCHAR(10),
-dsc VARCHAR(50),
-CONSTRAINT tipo_despesa_pk primary key(ID),
-CONSTRAINT tipo_despesa_desp_viag_fk foreign key(Cod_Despesa) references despesa_viagem(COD)
-);
-
-ALTER TABLE tipo_despesa
-	change Cod_Despesa Cod_Despesa VARCHAR(10) NOT NULL,
-    change dsc dsc VARCHAR(50) NOT NULL;
-    
-CREATE TABLE chamado(
-No_Seq INT,
-Tipo VARCHAR(30),
-Status_ ENUM('Não Atendido', 'Em Atendimento', 'Finalizado'),
-Descric VARCHAR(100),
-Prioridade ENUM('Alta', 'Comum', 'Urgente'),
-CONSTRAINT chamado_pk primary key(No_Seq)
-);
-
-
-CREATE TABLE fornecedor(
-Cnpj_fornecedor VARCHAR(10),
-Telefone INTEGER,
-Razao VARCHAR(20),
-Endereco VARCHAR(30),
-Email VARCHAR(20),
-CONSTRAINT fornecedor_pk primary key(Cnpj_fornecedor)
-);
-
-CREATE TABLE insumo(
-Cod_Insumo VARCHAR(15),
-Descri VARCHAR(15),
-CONSTRAINT insumo_pk primary key(Cod_insumo)
-);
-
-CREATE TABLE fornece(
-Dt_inicio VARCHAR(15),
-Dt_fim VARCHAR(15),
-Valor_unit VARCHAR(15),
-Cnpj_fornecedor VARCHAR(10),
-Cod_insumo VARCHAR(10),
-CONSTRAINT fornece_pk primary key(Cnpj_fornecedor, Cod_insumo),
-CONSTRAINT fornece_fk foreign key(Cod_insumo) references insumo(Cod_insumo)
-);
-
-CREATE TABLE categoria(
-Cod_categoria VARCHAR(15),
-Descricao VARCHAR(12),
-CONSTRAINT categoria_pk primary key(Cod_categoria)
-);
-
-CREATE TABLE almoxarifado(
-ID VARCHAR(14),
-Qtd_total INTEGER,
-Entrada_mes DATE,
-Saida_mes DATE,
-Descricao VARCHAR(16),
-CONSTRAINT almoxarifado_pk primary key(ID)
-);
-
-ALTER TABLE almoxarifado
-	add Sequencial_item_estoq VARCHAR(16),
-    add Cod_insumo VARCHAR(15),
-	add CONSTRAINT almoxarif_item_estoq_fk foreign key(Cod_insumo, Sequencial_item_estoq)
-    references item_estoque(Cod_insumo, Sequencial_insumo);
-
-CREATE TABLE estante(
-COD INT,
-COD_ID_Almoxarif VARCHAR(1),
-Descric VARCHAR(30) NOT NULL,
-CONSTRAINT estante_pk primary key (COD)
-);
-
-#Modificando o tamanho do Código de almoxarifado, é pra ser 10 e não varchar de 1.
-ALTER TABLE estante
-	CHANGE COD_ID_Almoxarif COD_ID_Almoxarif VARCHAR(10) NOT NULL;
-    
-ALTER TABLE estante 
-	ADD CONSTRAINT FK_ESTANTE FOREIGN KEY (COD_ID_almoxarifado) REFERENCES ALMOXARIFADO (Cod_ID);
-    
-ALTER TABLE estante
-	ADD Seq_item_estoq VARCHAR(16),
-    ADD Cod_insumo VARCHAR(15),
-    ADD CONSTRAINT estante_item_estoq_fk foreign key(Cod_insumo, Seq_item_estoq)
-    references item_estoque(Cod_insumo, Sequencial_insumo);
-
-CREATE TABLE item_estoque(
-Sequencial_insumo VARCHAR(16),
-Cod_insumo VARCHAR(15),
-Data_entrada DATE,
-Data_final DATE,
-Data_valida DATE,
-Preco_compra VARCHAR(14),
-Qtd_minima INTEGER,
-Qtd_atual INTEGER,
-CONSTRAINT item_estoque_pk primary key(Cod_insumo, Sequencial_insumo),
-CONSTRAINT insumo_fk foreign key(Cod_insumo) references insumo(Cod_insumo)
-);
-
-ALTER table item_estoque
-	add Cod_Estante INT,
-    add CONSTRAINT item_estoq_estante_fk foreign key(Cod_Estante)
-    references estante(COD);
-    
-ALTER TABLE item_estoque
-	add Cod_Almoxarif VARCHAR(14) NOT NULL,
-    add CONSTRAINT item_estoq_almoxarif_fk foreign key(Cod_Almoxarif)
-    references almoxarifado(COD_ID);
-
-CREATE TABLE insumo_usado_servico(
-Cod_insumo VARCHAR(15),
-Qtd INTEGER,
-CONSTRAINT insumo_usado_servico_pk primary key(Cod_insumo),
-CONSTRAINT insumo_fk foreign key(Cod_insumo) references insumo(Cod_insumo) 
-);
-
-CREATE TABLE servico(
-Cod_servico VARCHAR(13),
-Status_servico VARCHAR(11),
-Descricao VARCHAR(17),
-Valor VARCHAR(17),
-CONSTRAINT servico_pk primary key(Cod_servico)
-);
