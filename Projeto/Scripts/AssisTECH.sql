@@ -66,7 +66,7 @@ Qtde VARCHAR(15),
 CONSTRAINT insumo_pk primary key(Cod_insumo)
 );
 
-CREATE TABLE solict_insumo(
+#CREATE TABLE solict_insumo(
 
 
 #TABELA CONTRATO
