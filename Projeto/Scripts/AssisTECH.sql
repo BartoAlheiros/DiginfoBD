@@ -17,6 +17,16 @@ change endereco Endereço VARCHAR(30),
 change nome Nome VARCHAR(15), 
 change matriz Matriz VARCHAR(20);
 
+CREATE TABLE IF NOT EXISTS `assistech`.`jornada_trabalho` (
+  `ID` VARCHAR(8) NOT NULL DEFAULT '',
+  `Horario_Inicio` INT(11) NULL DEFAULT NULL,
+  `Horario_Fim` INT(11) NULL DEFAULT NULL,
+  `Trabalha_Sabado` VARCHAR(5) NULL DEFAULT NULL,
+  `Descricao` VARCHAR(7) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
 #tentando resolver o problema de não conseguir adicionar CNPJ como chave estrangeira de empresa
 alter table unidade_de_suporte change CNPJ CNPJ INTEGER(14);
 alter table unidade_de_suporte add RazãoSocial VARCHAR(20);
