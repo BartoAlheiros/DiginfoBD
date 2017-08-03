@@ -76,6 +76,10 @@ Qtde VARCHAR(15),
 CONSTRAINT insumo_pk primary key(Cod_insumo)
 );
 
+alter table insumo
+	add COD VARCHAR(15);
+        
+
 #CREATE TABLE solict_insumo(
 
 
@@ -561,7 +565,7 @@ Preco_compra VARCHAR(14),
 Qtd_minima INTEGER,
 Qtd_atual INTEGER,
 CONSTRAINT item_estoque_pk primary key(Cod_insumo, Sequencial_insumo),
-CONSTRAINT insumo_fk foreign key(Cod_insumo) references insumo(Cod_insumo)
+CONSTRAINT item_estoq_insumo_fk foreign key(Cod_insumo) references insumo(COD)
 );
 
 ALTER table item_estoque
