@@ -8,7 +8,8 @@ uf VARCHAR(2),
 endereco VARCHAR(30), 
 nome VARCHAR(15), 
 matriz VARCHAR(20),
-primary key(CNPJ) );
+primary key(CNPJ) 
+);
 
 alter table unidade_de_suporte 
 change estado Estado VARCHAR(10),
