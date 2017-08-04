@@ -62,7 +62,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `mydb`.`unid_suporte_tem_funcionario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`unid_suporte_tem_funcionario` (
+CREATE TABLE IF NOT EXISTS `assistech`.`unid_suporte_tem_funcionario` (
   `Cod_Unid_Sup` VARCHAR(15) NOT NULL,
   `Mat_Funcionario` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`Cod_Unid_Sup`, `Mat_Funcionario`),
@@ -75,6 +75,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`unid_suporte_tem_funcionario` (
 
 USE `assistech` ;
 
+
+DROP TABLE jornada_trabalho;
 -- -----------------------------------------------------
 -- Table `assistech`.`jornada_trabalho`
 -- -----------------------------------------------------
@@ -87,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `assistech`.`jornada_trabalho` (
   PRIMARY KEY (`ID`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
 
 -- -----------------------------------------------------
 -- Table `assistech`.`funcionario`
