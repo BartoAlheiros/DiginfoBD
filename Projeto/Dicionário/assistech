@@ -1,0 +1,30 @@
+<html><head>
+<title>Data dictionary: mydb</title>
+<style>
+    td,th {
+      text-align:center; 
+      vertical-align:middle;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    caption, th, td {
+      padding: .2em .8em;
+      border: 1px solid #fff;
+    }
+    caption {
+      background: #dbb768;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    th {
+      font-weight: bold;
+      background: #f3ce7d;
+    }
+    td {
+      background: #ffea97;
+    }
+  </style>
+</head>
+<body>
+</body></html>

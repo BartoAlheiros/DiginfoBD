@@ -146,7 +146,25 @@ DataEntradaEquip DATE,
 CONSTRAINT equipamento_pk primary key(Cod_Equipamento)
 );
 
+CREATE TABLE fatura(
+COD VARCHAR(10),
+status_ VARCHAR(50),
+No_Parcelas INT,
+Valor_Total float,
+constraint fatura_pk primary key(COD)
+);
 
+CREATE TABLE parcela_pagamento(
+Cod_fat VARCHAR(10),
+Seq INT,
+Dta_Pagto date,
+Dta_Parcela date,
+vl_pag_parcela double,
+vl_total double,
+juros float,
+constraint parc_pag_pk primary key(Cod_fat, Seq),
+constraint parc_pgto_fat_fk foreign key(Cod_fat) references fatura(COD)
+);
 
 alter table equipamento
 	add IP_Rede VARCHAR(12);
@@ -170,8 +188,21 @@ CONSTRAINT computador_pk primary key(Cod_Equipamento),
 CONSTRAINT computador_equipamento_fk foreign key(Cod_Equipamento) references equipamento(Cod_Equipamento) 
 );
 
-#CREATE TABLE 
+CREATE TABLE impressora(
+Cod_Equip VARCHAR(8),
+modelo VARCHAR(50),
+IP_Rede VARCHAR(12),
+CONSTRAINT impressora_pk primary key(Cod_Equip),
+CONSTRAINT impressora_equip_fk foreign key(Cod_Equip) references equipamento(Cod_Equipamento)
+);
 
+CREATE TABLE nobreak(
+Cod_Equip VARCHAR(8),
+modelo VARCHAR(20),
+kva INT,
+constraint nobreak_pk primary key(Cod_Equip),
+constraint nobreak_equip_fk foreign key(Cod_Equip) references equipamento(Cod_Equipamento)
+);
 
 CREATE TABLE HISTORICO_MANUTENCAO(
 Dta_Abertura VARCHAR(128) NOT NULL
@@ -267,9 +298,6 @@ CONSTRAINT ordem_de_servico_fk foreign key(CodOrcamento) references orcamento(Co
 ALTER table ordem_de_servico
 	CHANGE PrazoEmDiasOS Prazo_EmDias_OS SMALLINT;
     
-ALTER table ordem_de_servico
-	add 
-
 #TABELA ORCAMENTO
 CREATE TABLE orcamento(
 CodOrcamento VARCHAR(10),
@@ -279,13 +307,6 @@ DtEmissao_Orcto DATE,
 ValidadeEmDias_Orcto DATE,
 UltimaData_Orcto DATE,
 CONSTRAINT orcamento_pk primary key(CodOrcamento));
-
-CREATE TABLE fatura(
-COD VARCHAR(10),
-Status ENUM('A Pagar', 'Paga'),
-NUM_PARCELAS SMALLINT,
-Valor_Total MEDIUMINT,
-CONSTRAINT fatura_pk primary key(COD)
 
 
 #adicionando coluna 
@@ -476,9 +497,9 @@ ALTER TABLE tipo_despesa
 CREATE TABLE chamado(
 No_Seq INT,
 Tipo VARCHAR(30),
-Status_ ENUM('Não Atendido', 'Em Atendimento', 'Finalizado'),
+Status_ VARCHAR(20),
 Descric VARCHAR(100),
-Prioridade ENUM('Alta', 'Comum', 'Urgente'),
+Prioridade VARCHAR(20),
 CONSTRAINT chamado_pk primary key(No_Seq)
 );
 
@@ -580,15 +601,31 @@ ALTER TABLE item_estoque
 
 CREATE TABLE insumo_usado_servico(
 Cod_insumo VARCHAR(15),
-Qtd INTEGER,
-CONSTRAINT insumo_usado_servico_pk primary key(Cod_insumo),
-CONSTRAINT insumo_fk foreign key(Cod_insumo) references insumo(Cod_insumo) 
+Qtd INTEGER
 );
 
 CREATE TABLE servico(
-Cod_servico VARCHAR(13),
-Status_servico VARCHAR(11),
+COD VARCHAR(13),
+Status VARCHAR(11),
 Descricao VARCHAR(17),
 Valor VARCHAR(17),
-CONSTRAINT servico_pk primary key(Cod_servico)
+CONSTRAINT servico_pk primary key(COD)
+);
+
+CREATE TABLE tipo_servico(
+Cod_tipo_servico VARCHAR(15),
+Cod_servico VARCHAR(13),
+Descricao VARCHAR(30),
+CONSTRAINT tipo_servico_pk primary key(Cod_tipo_servico),
+CONSTRAINT cod_servico_fk foreign key(Cod_servico) references servico(COD)
+);
+
+CREATE TABLE base_problema_KB(
+Id_base_problema_KB VARCHAR(26),
+Descricao VARCHAR(25),
+Solucao VARCHAR(23),
+Dt_entrada DATE,
+Tempo_necessario VARCHAR(22),
+Obs VARCHAR(21),
+CONSTRAINT Id_base_problema_KB_pk primary key(Id_base_problema_KB)
 );

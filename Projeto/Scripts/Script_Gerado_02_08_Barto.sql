@@ -90,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `assistech`.`jornada_trabalho` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
 -- -----------------------------------------------------
 -- Table `assistech`.`funcionario`
 -- -----------------------------------------------------
