@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `assistech` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `assistech`;
--- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: assistech
 -- ------------------------------------------------------
--- Server version	5.6.21
+-- Server version	5.7.18-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,6 +18,29 @@ USE `assistech`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `abre_chamado`
+--
+
+DROP TABLE IF EXISTS `abre_chamado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abre_chamado` (
+  `cliente_COD` varchar(15) NOT NULL,
+  PRIMARY KEY (`cliente_COD`),
+  CONSTRAINT `fk_cliente_abre_chamado_cliente1` FOREIGN KEY (`cliente_COD`) REFERENCES `cliente` (`COD`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `abre_chamado`
+--
+
+LOCK TABLES `abre_chamado` WRITE;
+/*!40000 ALTER TABLE `abre_chamado` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abre_chamado` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `adm_financeiro`
 --
 
@@ -25,14 +48,16 @@ DROP TABLE IF EXISTS `adm_financeiro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `adm_financeiro` (
-  `Matricula` varchar(10) NOT NULL DEFAULT '',
+  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
   `Cod_Contracheque` varchar(14) DEFAULT NULL,
   `Cod_Desp_Viag` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`Matricula`),
-  KEY `adm_fincanceiro_contracheque` (`Cod_Contracheque`),
+  PRIMARY KEY (`Matricula_funcionario`),
   KEY `adm_financeiro_desp_viag_fk` (`Cod_Desp_Viag`),
+  KEY `funcionario_adm_financeiro_idx_fk` (`Matricula_funcionario`),
+  KEY `contracheque_admin_financeiro_fk` (`Cod_Contracheque`),
+  KEY `fk_despesa_viagem_adm_financeiro1` (`Cod_Desp_Viag`),
   CONSTRAINT `adm_financeiro_desp_viag_fk` FOREIGN KEY (`Cod_Desp_Viag`) REFERENCES `despesa_viagem` (`COD`),
-  CONSTRAINT `adm_financeiro_funcionario_fk` FOREIGN KEY (`Matricula`) REFERENCES `funcionario` (`Matricula`)
+  CONSTRAINT `funcionario_adm_financeiro_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,12 +78,12 @@ DROP TABLE IF EXISTS `almoxarifado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `almoxarifado` (
-  `COD_ID` varchar(14) NOT NULL,
+  `ID` varchar(14) NOT NULL,
   `Qtd_total` int(11) DEFAULT NULL,
   `Entrada_mes` date DEFAULT NULL,
   `Saida_mes` date DEFAULT NULL,
   `Descricao` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`COD_ID`)
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,9 +104,9 @@ DROP TABLE IF EXISTS `atendente_solucionador_direcionador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `atendente_solucionador_direcionador` (
-  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
-  PRIMARY KEY (`Matricula_funcionario`),
-  CONSTRAINT `atendente_solucionador_direcionador_funcionario_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`Matricula`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  PRIMARY KEY (`funcionario_matricula`),
+  CONSTRAINT `fk_atendente_solucionador_direcionador_tecnico1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `tecnico` (`funcionario_matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -122,6 +147,33 @@ LOCK TABLES `base_problema_kb` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `baseou_em`
+--
+
+DROP TABLE IF EXISTS `baseou_em`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `baseou_em` (
+  `Id_base_problema_KB` varchar(26) NOT NULL,
+  `servico_COD` varchar(13) NOT NULL,
+  PRIMARY KEY (`Id_base_problema_KB`,`servico_COD`),
+  KEY `fk_servico_has_base_problema_kb_base_problema_kb1_idx` (`Id_base_problema_KB`),
+  KEY `fk_servico_has_base_problema_kb_servico1_idx` (`servico_COD`),
+  CONSTRAINT `fk_servico_has_base_problema_kb_base_problema_kb1` FOREIGN KEY (`Id_base_problema_KB`) REFERENCES `base_problema_kb` (`Id_base_problema_KB`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_has_base_problema_kb_servico1` FOREIGN KEY (`servico_COD`) REFERENCES `servico` (`COD`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `baseou_em`
+--
+
+LOCK TABLES `baseou_em` WRITE;
+/*!40000 ALTER TABLE `baseou_em` DISABLE KEYS */;
+/*!40000 ALTER TABLE `baseou_em` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categoria`
 --
 
@@ -130,7 +182,7 @@ DROP TABLE IF EXISTS `categoria`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categoria` (
   `Cod_categoria` varchar(15) NOT NULL,
-  `Descricao` varchar(12) DEFAULT NULL,
+  `Descricao` varchar(12) NOT NULL,
   PRIMARY KEY (`Cod_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -178,10 +230,12 @@ DROP TABLE IF EXISTS `cliente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cliente` (
-  `COD` varchar(7) NOT NULL DEFAULT '',
-  `Prioridade` enum('Alta','Media','Baixa') DEFAULT NULL,
-  `Endereco` varchar(100) DEFAULT NULL,
-  `UF_Estado` varchar(2) DEFAULT NULL,
+  `COD` varchar(15) NOT NULL DEFAULT '',
+  `Prioridade` enum('Alta','Media','Baixa') NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `fone` varchar(16) NOT NULL,
+  `Endereco` varchar(100) NOT NULL,
+  `estado` varchar(50) NOT NULL,
   PRIMARY KEY (`COD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -196,32 +250,6 @@ LOCK TABLES `cliente` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `cliente_contato`
---
-
-DROP TABLE IF EXISTS `cliente_contato`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cliente_contato` (
-  `Cod_Cliente` varchar(7) NOT NULL DEFAULT '',
-  `Fone` varchar(12) DEFAULT NULL,
-  `Celular` varchar(13) DEFAULT NULL,
-  `Email` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Cod_Cliente`),
-  CONSTRAINT `cliente_contato_cliente_fk` FOREIGN KEY (`Cod_Cliente`) REFERENCES `cliente` (`COD`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cliente_contato`
---
-
-LOCK TABLES `cliente_contato` WRITE;
-/*!40000 ALTER TABLE `cliente_contato` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cliente_contato` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `cliente_fisico`
 --
 
@@ -229,9 +257,9 @@ DROP TABLE IF EXISTS `cliente_fisico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cliente_fisico` (
-  `Cod_Cliente` varchar(7) NOT NULL DEFAULT '',
+  `Cod_Cliente` varchar(15) NOT NULL DEFAULT '',
   `CPF` varchar(11) NOT NULL,
-  `Nome` varchar(50) DEFAULT NULL,
+  `Nome` varchar(50) NOT NULL,
   PRIMARY KEY (`Cod_Cliente`),
   UNIQUE KEY `CPF` (`CPF`),
   CONSTRAINT `cliente_fisico_cliente_fk` FOREIGN KEY (`Cod_Cliente`) REFERENCES `cliente` (`COD`)
@@ -255,9 +283,9 @@ DROP TABLE IF EXISTS `cliente_jur`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cliente_jur` (
-  `Cod_Cliente` varchar(7) NOT NULL DEFAULT '',
+  `Cod_Cliente` varchar(15) NOT NULL DEFAULT '',
   `CNPJ` varchar(14) NOT NULL,
-  `Razao_Social` varchar(50) DEFAULT NULL,
+  `Razao_Social` varchar(50) NOT NULL,
   PRIMARY KEY (`Cod_Cliente`),
   UNIQUE KEY `CNPJ` (`CNPJ`),
   CONSTRAINT `cliente_jur_fk` FOREIGN KEY (`Cod_Cliente`) REFERENCES `cliente` (`COD`)
@@ -282,9 +310,10 @@ DROP TABLE IF EXISTS `computador`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `computador` (
   `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
-  `Sist_OP` varchar(30) DEFAULT NULL,
+  `Sist_OP` varchar(30) NOT NULL,
+  `End_IP` varchar(15) NOT NULL,
   PRIMARY KEY (`Cod_Equipamento`),
-  CONSTRAINT `computador_equipamento_fk` FOREIGN KEY (`Cod_Equipamento`) REFERENCES `equipamento` (`Cod_Equipamento`)
+  CONSTRAINT `computador_equipamento_fk` FOREIGN KEY (`Cod_Equipamento`) REFERENCES `equipamento` (`Cod_Equipamento`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -306,17 +335,15 @@ DROP TABLE IF EXISTS `contracheque`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contracheque` (
   `Codigo` varchar(14) NOT NULL DEFAULT '',
-  `Matricula_Admin_Financeiro` varchar(10) NOT NULL,
-  `Mat_Funcionario` varchar(10) NOT NULL,
-  `Data_Contracheque` date DEFAULT NULL,
-  `Horas_extras` int(10) DEFAULT NULL,
-  `Salario_Base` int(9) DEFAULT NULL,
-  `Adicional_Salario` int(9) DEFAULT NULL,
+  `admin_financeiro_matricula` varchar(10) NOT NULL,
+  `funcionario_matricula` varchar(10) NOT NULL,
+  `Data_Contracheque` date NOT NULL,
+  `Horas_extras` int(10) DEFAULT '0',
+  `Salario_Base` int(9) NOT NULL,
+  `Adicional_Salario` int(9) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Codigo`),
-  KEY `contracheque_admin_fincanceiro_fk_idx` (`Matricula_Admin_Financeiro`),
-  KEY `contracheque_func_fk` (`Mat_Funcionario`),
-  CONSTRAINT `contracheque_admin_financeiro_fk` FOREIGN KEY (`Matricula_Admin_Financeiro`) REFERENCES `adm_financeiro` (`Matricula`),
-  CONSTRAINT `contracheque_func_fk` FOREIGN KEY (`Mat_Funcionario`) REFERENCES `funcionario` (`Matricula`)
+  KEY `contracheque_admin_fincanceiro_fk_idx` (`admin_financeiro_matricula`),
+  KEY `contracheque_func_fk` (`funcionario_matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -338,16 +365,16 @@ DROP TABLE IF EXISTS `contrato`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contrato` (
   `COD_Contrato` varchar(5) NOT NULL DEFAULT '',
-  `DataInicio` date DEFAULT NULL,
-  `DataFim` date DEFAULT NULL,
-  `StatusContrato` varchar(30) DEFAULT NULL,
-  `ID_Documento` varchar(10) NOT NULL,
   `ID_Tipo_Contrato` varchar(5) NOT NULL,
+  `unidade_de_suporte_CNPJ` varchar(18) NOT NULL,
+  `DataInicio` date NOT NULL,
+  `DataFim` date NOT NULL,
+  `StatusContrato` varchar(30) NOT NULL,
   PRIMARY KEY (`COD_Contrato`),
-  KEY `contrato_ID_Documento_fk` (`ID_Documento`),
   KEY `contrato_ID_Tipo_Contrato_fk` (`ID_Tipo_Contrato`),
-  CONSTRAINT `contrato_ID_Documento_fk` FOREIGN KEY (`ID_Documento`) REFERENCES `documento` (`ID_Documento`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_contrato_unidade_de_suporte1_idx` (`unidade_de_suporte_CNPJ`),
+  CONSTRAINT `contrato_ID_Tipo_Contrato_fk` FOREIGN KEY (`ID_Tipo_Contrato`) REFERENCES `tipo_contrato` (`ID_Tipo_Contrato`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_contrato_unidade_de_suporte1` FOREIGN KEY (`unidade_de_suporte_CNPJ`) REFERENCES `unidade_de_suporte` (`CNPJ`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -370,10 +397,10 @@ DROP TABLE IF EXISTS `dependente`;
 CREATE TABLE `dependente` (
   `Sequencial` int(10) NOT NULL DEFAULT '0',
   `Matricula_Func` varchar(10) NOT NULL DEFAULT '',
-  `Sexo` varchar(1) DEFAULT NULL,
-  `Data_Nascimento` date DEFAULT NULL,
-  `Parentesco` varchar(8) DEFAULT NULL,
-  `Idade` int(3) DEFAULT NULL,
+  `Sexo` varchar(1) NOT NULL,
+  `Data_Nascimento` date NOT NULL,
+  `Parentesco` varchar(20) NOT NULL,
+  `Idade` int(3) NOT NULL,
   PRIMARY KEY (`Matricula_Func`,`Sequencial`),
   CONSTRAINT `dependente_funcionario_fk` FOREIGN KEY (`Matricula_Func`) REFERENCES `funcionario` (`Matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -397,8 +424,14 @@ DROP TABLE IF EXISTS `despesa_viagem`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `despesa_viagem` (
   `COD` varchar(10) NOT NULL,
+  `tecnico_campo_matricula` varchar(10) NOT NULL,
+  `adm_financeiro_matricula` varchar(10) NOT NULL,
+  `tipo_despesa_ID` varchar(7) NOT NULL,
   `Valor` mediumint(9) NOT NULL,
-  PRIMARY KEY (`COD`)
+  PRIMARY KEY (`COD`),
+  KEY `fk_despesa_viagem_adm_financeiro1_idx` (`adm_financeiro_matricula`),
+  KEY `fk_despesa_viagem_tipo_despesa1_idx` (`tipo_despesa_ID`),
+  KEY `fk_despesa_viagem_tecnico_campo1_idx` (`tecnico_campo_matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -420,12 +453,15 @@ DROP TABLE IF EXISTS `documento`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `documento` (
   `ID_Documento` varchar(10) NOT NULL,
-  `Tipo` varchar(30) DEFAULT NULL,
-  `Título` varchar(50) DEFAULT NULL,
-  `Data_De_Criação` date DEFAULT NULL,
-  `Arquivo` varchar(6) DEFAULT NULL,
-  `Versão` varchar(4) DEFAULT NULL,
-  PRIMARY KEY (`ID_Documento`)
+  `contrato_COD_Contrato` varchar(5) NOT NULL,
+  `Tipo` varchar(30) NOT NULL,
+  `Título` varchar(50) NOT NULL,
+  `Data_De_Criação` date NOT NULL,
+  `Arquivo` varchar(6) NOT NULL,
+  `Versão` varchar(5) NOT NULL,
+  PRIMARY KEY (`ID_Documento`),
+  KEY `fk_documento_contrato1_idx` (`contrato_COD_Contrato`),
+  CONSTRAINT `fk_documento_contrato1` FOREIGN KEY (`contrato_COD_Contrato`) REFERENCES `contrato` (`COD_Contrato`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -446,10 +482,10 @@ DROP TABLE IF EXISTS `empresa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `empresa` (
-  `CNPJ` varchar(14) NOT NULL,
+  `CNPJ` varchar(18) NOT NULL,
   `RazaoSocial` varchar(20) DEFAULT NULL,
-  `Endereço` varchar(30) DEFAULT NULL,
-  `Fone` varchar(15) DEFAULT NULL,
+  `Endereço` varchar(30) NOT NULL,
+  `Fone` varchar(15) NOT NULL,
   PRIMARY KEY (`CNPJ`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -460,6 +496,7 @@ CREATE TABLE `empresa` (
 
 LOCK TABLES `empresa` WRITE;
 /*!40000 ALTER TABLE `empresa` DISABLE KEYS */;
+INSERT INTO `empresa` VALUES ('12.475.369/1254-05','SmarTECH','Rua Alberto Calado, 101.','3036-1012'),('12.475.369/1254-06','SOLCast','Rua Alberto Calado, 102.','3036-1013'),('12.475.369/1254-07','Sub11','Rua Alberto Calado, 103.','3036-1014'),('12.475.369/1254-08','ALFATecno','Rua Alberto Calado, 104.','3036-1015'),('12.475.369/1254-09','ARMAN','Rua Alberto Calado, 105.','3036-1016'),('12.475.369/1254-10','USAbit','Rua Alberto Calado, 107.','3036-1017');
 /*!40000 ALTER TABLE `empresa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,9 +509,9 @@ DROP TABLE IF EXISTS `equipamento`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `equipamento` (
   `Cod_Equipamento` varchar(8) NOT NULL DEFAULT '',
-  `Cod_Contrato` varchar(5) DEFAULT NULL,
+  `Num_OS` varchar(10) NOT NULL,
+  `Cod_Contrato` varchar(5) NOT NULL,
   `Fabricante` varchar(30) NOT NULL,
-  `Modelo` varchar(30) NOT NULL,
   `Status` enum('Bom','Regular','Ruim') NOT NULL,
   `Historico` varchar(40) DEFAULT NULL,
   `Descricao` varchar(50) NOT NULL,
@@ -483,9 +520,11 @@ CREATE TABLE `equipamento` (
   `Num_Serie` varchar(11) DEFAULT NULL,
   `IP_Rede` varchar(12) DEFAULT NULL,
   `Mask_Rede` varchar(12) DEFAULT NULL,
-  PRIMARY KEY (`Cod_Equipamento`),
+  PRIMARY KEY (`Cod_Equipamento`,`Num_OS`),
   KEY `equipamento_contrato_fk_idx` (`Cod_Contrato`),
-  CONSTRAINT `equipamento_contrato_fk` FOREIGN KEY (`Cod_Contrato`) REFERENCES `contrato` (`COD_Contrato`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_equipamento_ordem_de_servico1_idx` (`Num_OS`),
+  CONSTRAINT `equipamento_contrato_fk` FOREIGN KEY (`Cod_Contrato`) REFERENCES `contrato` (`COD_Contrato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_equipamento_ordem_de_servico1` FOREIGN KEY (`Num_OS`) REFERENCES `ordem_de_servico` (`Num_OS`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -507,7 +546,6 @@ DROP TABLE IF EXISTS `estante`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `estante` (
   `COD` int(11) NOT NULL,
-  `COD_ID_Almoxarif` varchar(10) NOT NULL,
   `Descric` varchar(30) NOT NULL,
   PRIMARY KEY (`COD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -609,20 +647,24 @@ DROP TABLE IF EXISTS `funcionario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `funcionario` (
-  `Matricula` varchar(10) NOT NULL DEFAULT '',
-  `Cpf` int(9) DEFAULT NULL,
-  `Nome` varchar(15) DEFAULT NULL,
-  `Id_Jornada_Trabalho` varchar(8) DEFAULT NULL,
+  `matricula` varchar(10) NOT NULL DEFAULT '',
+  `Cpf` varchar(14) NOT NULL,
+  `Matricula_supervisor` varchar(10) NOT NULL,
+  `unidade_de_suporte_CNPJ` varchar(18) NOT NULL,
+  `Login` varchar(15) NOT NULL,
+  `Senha` varchar(8) NOT NULL,
+  `Nome` varchar(15) NOT NULL,
   `Cod_Contracheque` varchar(10) DEFAULT NULL,
   `Sequencial_Dependente` varchar(15) DEFAULT NULL,
-  `Login` varchar(15) DEFAULT NULL,
-  `Senha` varchar(8) DEFAULT NULL,
-  `Email` varchar(12) DEFAULT NULL,
+  `Email` varchar(12) NOT NULL,
   `Carga_hora` int(10) DEFAULT NULL,
-  PRIMARY KEY (`Matricula`),
-  UNIQUE KEY `Matricula_UNIQUE` (`Matricula`),
-  KEY `func_j_trabalho_fk_idx` (`Id_Jornada_Trabalho`),
-  CONSTRAINT `func_j_trabalho_fk` FOREIGN KEY (`Id_Jornada_Trabalho`) REFERENCES `jornada_trabalho` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`matricula`,`Cpf`),
+  UNIQUE KEY `Matricula_UNIQUE` (`matricula`),
+  KEY `fk_funcionario_unidade_de_suporte1_idx` (`unidade_de_suporte_CNPJ`),
+  KEY `fk_funcionario_supervisiona1_idx` (`Matricula_supervisor`),
+  KEY `fk_funcionario_unidade_de_suporte_idx` (`unidade_de_suporte_CNPJ`),
+  CONSTRAINT `fk_funcionario_supervisiona1` FOREIGN KEY (`Matricula_supervisor`) REFERENCES `supervisiona` (`Matricula_supervisor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_funcionario_unid_suporte` FOREIGN KEY (`unidade_de_suporte_CNPJ`) REFERENCES `unidade_de_suporte` (`CNPJ`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -644,8 +686,7 @@ DROP TABLE IF EXISTS `impressora`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `impressora` (
   `Cod_Equip` varchar(8) NOT NULL DEFAULT '',
-  `modelo` varchar(50) DEFAULT NULL,
-  `IP_Rede` varchar(12) DEFAULT NULL,
+  `modelo` varchar(50) NOT NULL,
   PRIMARY KEY (`Cod_Equip`),
   CONSTRAINT `impressora_equip_fk` FOREIGN KEY (`Cod_Equip`) REFERENCES `equipamento` (`Cod_Equipamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -669,8 +710,11 @@ DROP TABLE IF EXISTS `insumo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `insumo` (
   `Cod_Insumo` varchar(15) NOT NULL,
-  `Descri` varchar(15) DEFAULT NULL,
-  PRIMARY KEY (`Cod_Insumo`)
+  `Cod_categoria_insumo` varchar(15) NOT NULL,
+  `Descric` varchar(100) NOT NULL,
+  PRIMARY KEY (`Cod_Insumo`,`Cod_categoria_insumo`),
+  KEY `fk_insumo_categoria1_idx` (`Cod_categoria_insumo`),
+  CONSTRAINT `fk_insumo_categoria1` FOREIGN KEY (`Cod_categoria_insumo`) REFERENCES `categoria` (`Cod_categoria`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -691,8 +735,14 @@ DROP TABLE IF EXISTS `insumo_usado_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `insumo_usado_servico` (
-  `Cod_insumo` varchar(15) DEFAULT NULL,
-  `Qtd` int(11) DEFAULT NULL
+  `COD_servico` varchar(13) NOT NULL,
+  `COD_Insumo` varchar(15) NOT NULL,
+  `qtd` int(11) NOT NULL,
+  PRIMARY KEY (`COD_servico`,`COD_Insumo`),
+  KEY `fk_servico_has_insumo_insumo1_idx` (`COD_Insumo`),
+  KEY `fk_servico_has_insumo_servico1_idx` (`COD_servico`),
+  CONSTRAINT `fk_servico_has_insumo_insumo1` FOREIGN KEY (`COD_Insumo`) REFERENCES `insumo` (`Cod_Insumo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_has_insumo_servico1` FOREIGN KEY (`COD_servico`) REFERENCES `servico` (`COD`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -715,19 +765,19 @@ DROP TABLE IF EXISTS `item_estoque`;
 CREATE TABLE `item_estoque` (
   `Sequencial_insumo` varchar(16) NOT NULL,
   `Cod_insumo` varchar(15) NOT NULL,
-  `Data_entrada` date DEFAULT NULL,
-  `Data_final` date DEFAULT NULL,
-  `Data_valida` date DEFAULT NULL,
-  `Preco_compra` varchar(14) DEFAULT NULL,
-  `Qtd_minima` int(11) DEFAULT NULL,
-  `Qtd_atual` int(11) DEFAULT NULL,
-  `Cod_Estante` int(11) DEFAULT NULL,
-  `Cod_Almoxarif` varchar(14) NOT NULL,
+  `Data_entrada` date NOT NULL,
+  `Data_final` date NOT NULL,
+  `Data_validade` date NOT NULL,
+  `Preco_compra` varchar(14) NOT NULL,
+  `Qtd_minima` int(11) NOT NULL,
+  `Qtd_atual` int(11) NOT NULL,
+  `Cod_Estante` int(11) NOT NULL,
+  `ID_Almoxarif` varchar(14) NOT NULL,
   PRIMARY KEY (`Cod_insumo`,`Sequencial_insumo`),
+  KEY `item_estoq_almoxarif_fk` (`ID_Almoxarif`),
   KEY `item_estoq_estante_fk` (`Cod_Estante`),
-  KEY `item_estoq_almoxarif_fk` (`Cod_Almoxarif`),
   CONSTRAINT `insumo_fk` FOREIGN KEY (`Cod_insumo`) REFERENCES `insumo` (`Cod_Insumo`),
-  CONSTRAINT `item_estoq_almoxarif_fk` FOREIGN KEY (`Cod_Almoxarif`) REFERENCES `almoxarifado` (`COD_ID`),
+  CONSTRAINT `item_estoq_almoxarif_fk` FOREIGN KEY (`ID_Almoxarif`) REFERENCES `almoxarifado` (`ID`),
   CONSTRAINT `item_estoq_estante_fk` FOREIGN KEY (`Cod_Estante`) REFERENCES `estante` (`COD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -750,11 +800,14 @@ DROP TABLE IF EXISTS `jornada_trabalho`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jornada_trabalho` (
   `ID` varchar(8) NOT NULL DEFAULT '',
-  `Horario_Inicio` int(11) DEFAULT NULL,
-  `Horario_Fim` int(11) DEFAULT NULL,
-  `Trabalha_Sabado` varchar(5) DEFAULT NULL,
-  `Descricao` varchar(7) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  `Horario_Inicio` int(11) NOT NULL,
+  `Horario_Fim` int(11) NOT NULL,
+  `Trabalha_Sabado` varchar(5) NOT NULL,
+  `Descricao` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`ID`,`funcionario_matricula`),
+  KEY `fk_jornada_trabalho_funcionario1_idx` (`funcionario_matricula`),
+  CONSTRAINT `fk_jornada_trabalho_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -775,15 +828,15 @@ DROP TABLE IF EXISTS `kpi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kpi` (
-  `Matricula_tecnico` varchar(10) NOT NULL DEFAULT '',
+  `tecnico_matricula` varchar(10) NOT NULL,
   `Sequencial` int(11) NOT NULL DEFAULT '0',
   `Kpi_1` varchar(30) DEFAULT NULL,
   `Kpi_2` varchar(30) DEFAULT NULL,
   `Dsc_kpi_1` varchar(100) DEFAULT NULL,
   `Dsc_kpi_2` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`Sequencial`,`Matricula_tecnico`),
-  KEY `kpi_tecnico_fk` (`Matricula_tecnico`),
-  CONSTRAINT `kpi_tecnico_fk` FOREIGN KEY (`Matricula_tecnico`) REFERENCES `tecnico` (`Matricula_funcionario`)
+  PRIMARY KEY (`tecnico_matricula`,`Sequencial`),
+  KEY `fk_kpi_tecnico1_idx` (`tecnico_matricula`),
+  CONSTRAINT `fk_kpi_tecnico1` FOREIGN KEY (`tecnico_matricula`) REFERENCES `tecnico` (`funcionario_matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -797,6 +850,31 @@ LOCK TABLES `kpi` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `localizacao`
+--
+
+DROP TABLE IF EXISTS `localizacao`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `localizacao` (
+  `unidade_de_suporte_CNPJ` varchar(18) NOT NULL,
+  `estado` varchar(20) NOT NULL,
+  `end` varchar(45) NOT NULL,
+  PRIMARY KEY (`unidade_de_suporte_CNPJ`),
+  CONSTRAINT `fk_Localizacao_unidade_de_suporte1` FOREIGN KEY (`unidade_de_suporte_CNPJ`) REFERENCES `unidade_de_suporte` (`CNPJ`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `localizacao`
+--
+
+LOCK TABLES `localizacao` WRITE;
+/*!40000 ALTER TABLE `localizacao` DISABLE KEYS */;
+/*!40000 ALTER TABLE `localizacao` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `nobreak`
 --
 
@@ -805,8 +883,8 @@ DROP TABLE IF EXISTS `nobreak`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `nobreak` (
   `Cod_Equip` varchar(8) NOT NULL DEFAULT '',
-  `modelo` varchar(20) DEFAULT NULL,
-  `kva` int(11) DEFAULT NULL,
+  `modelo` varchar(20) NOT NULL,
+  `kva` int(11) NOT NULL,
   PRIMARY KEY (`Cod_Equip`),
   CONSTRAINT `nobreak_equip_fk` FOREIGN KEY (`Cod_Equip`) REFERENCES `equipamento` (`Cod_Equipamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -830,11 +908,11 @@ DROP TABLE IF EXISTS `orcamento`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orcamento` (
   `CodOrcamento` varchar(10) NOT NULL DEFAULT '',
-  `DescOrcamento` varchar(50) DEFAULT NULL,
-  `DtAbert_Orcto` date DEFAULT NULL,
-  `DtEmissao_Orcto` date DEFAULT NULL,
-  `ValidadeEmDias_Orcto` date DEFAULT NULL,
-  `UltimaData_Orcto` date DEFAULT NULL,
+  `DescOrcamento` varchar(50) NOT NULL,
+  `DtAbert_Orcto` date NOT NULL,
+  `DtEmissao_Orcto` date NOT NULL,
+  `ValidadeEmDias_Orcto` date NOT NULL,
+  `UltimaData_Orcto` date NOT NULL,
   PRIMARY KEY (`CodOrcamento`),
   UNIQUE KEY `CodOrcamento_UNIQUE` (`CodOrcamento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -858,14 +936,17 @@ DROP TABLE IF EXISTS `ordem_de_servico`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ordem_de_servico` (
   `Num_OS` varchar(10) NOT NULL DEFAULT '',
-  `Cod_Orcamento` varchar(10) DEFAULT NULL,
-  `Status_OS` enum('Aberto','Fechado') DEFAULT NULL,
-  `DataCricao_OS` date DEFAULT NULL,
-  `Prazo_EmDias_OS` smallint(6) DEFAULT NULL,
-  `DtDevida` date DEFAULT NULL,
-  PRIMARY KEY (`Num_OS`),
-  UNIQUE KEY `Cod_Orcamento_UNIQUE` (`Cod_Orcamento`),
-  CONSTRAINT `orcamento_ordem_fk` FOREIGN KEY (`Cod_Orcamento`) REFERENCES `orcamento` (`CodOrcamento`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `chamado_No_Seq` int(11) NOT NULL,
+  `orcamento_CodOrcamento` varchar(10) NOT NULL,
+  `Status_OS` varchar(20) NOT NULL,
+  `DataCricao_OS` date NOT NULL,
+  `Prazo_EmDias_OS` smallint(6) NOT NULL,
+  `DtDevida` tinyint(1) NOT NULL,
+  PRIMARY KEY (`Num_OS`,`chamado_No_Seq`,`orcamento_CodOrcamento`),
+  KEY `fk_ordem_de_servico_chamado1_idx` (`chamado_No_Seq`),
+  KEY `fk_ordem_de_servico_orcamento1_idx` (`orcamento_CodOrcamento`),
+  CONSTRAINT `fk_ordem_de_servico_chamado1` FOREIGN KEY (`chamado_No_Seq`) REFERENCES `chamado` (`No_Seq`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ordem_de_servico_orcamento1` FOREIGN KEY (`orcamento_CodOrcamento`) REFERENCES `orcamento` (`CodOrcamento`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -886,15 +967,16 @@ DROP TABLE IF EXISTS `parcela_pagamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `parcela_pagamento` (
-  `Cod_fat` varchar(10) NOT NULL DEFAULT '',
   `Seq` int(11) NOT NULL DEFAULT '0',
-  `Dta_Pagto` date DEFAULT NULL,
-  `Dta_Parcela` date DEFAULT NULL,
-  `vl_pag_parcela` double DEFAULT NULL,
-  `vl_total` double DEFAULT NULL,
-  `juros` float DEFAULT NULL,
-  PRIMARY KEY (`Cod_fat`,`Seq`),
-  CONSTRAINT `parc_pgto_fat_fk` FOREIGN KEY (`Cod_fat`) REFERENCES `fatura` (`COD`)
+  `fatura_COD` varchar(10) NOT NULL,
+  `Dta_Pagto` date NOT NULL,
+  `Dta_Parcela` date NOT NULL,
+  `vl_pag_parcela` double NOT NULL,
+  `vl_total` double NOT NULL,
+  `juros` float NOT NULL,
+  PRIMARY KEY (`Seq`,`fatura_COD`),
+  KEY `fk_parcela_pagamento_fatura1_idx` (`fatura_COD`),
+  CONSTRAINT `fk_parcela_pagamento_fatura1` FOREIGN KEY (`fatura_COD`) REFERENCES `fatura` (`COD`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -916,10 +998,16 @@ DROP TABLE IF EXISTS `servico`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `servico` (
   `COD` varchar(13) NOT NULL DEFAULT '',
-  `Status` varchar(11) DEFAULT NULL,
-  `Descricao` varchar(17) DEFAULT NULL,
-  `Valor` varchar(17) DEFAULT NULL,
-  PRIMARY KEY (`COD`)
+  `COD_Tipo_Servico` varchar(15) NOT NULL,
+  `Num_OS` varchar(10) NOT NULL,
+  `Status` varchar(20) NOT NULL,
+  `Descricao` varchar(255) NOT NULL,
+  `Valor` int(11) NOT NULL,
+  PRIMARY KEY (`COD`,`Num_OS`,`COD_Tipo_Servico`),
+  KEY `fk_servico_ordem_de_servico1_idx` (`Num_OS`),
+  KEY `fk_servico_tipo_servico1_idx` (`COD_Tipo_Servico`),
+  CONSTRAINT `fk_servico_ordem_de_servico1` FOREIGN KEY (`Num_OS`) REFERENCES `ordem_de_servico` (`Num_OS`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_servico_tipo_servico1` FOREIGN KEY (`COD_Tipo_Servico`) REFERENCES `tipo_servico` (`Cod_tipo_servico`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -933,18 +1021,17 @@ LOCK TABLES `servico` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `supervisao`
+-- Table structure for table `supervisiona`
 --
 
-DROP TABLE IF EXISTS `supervisao`;
+DROP TABLE IF EXISTS `supervisiona`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `supervisao` (
+CREATE TABLE `supervisiona` (
   `Matricula_supervisor` varchar(10) NOT NULL DEFAULT '',
   `Matricula_supervisionado` varchar(10) NOT NULL DEFAULT '',
-  `Data_inicio` date DEFAULT NULL,
+  `Data_inicio` date NOT NULL,
   PRIMARY KEY (`Matricula_supervisor`,`Matricula_supervisionado`),
-  UNIQUE KEY `Matricula_supervisor_UNIQUE` (`Matricula_supervisor`),
   KEY `supervisao_supervisionado_fk` (`Matricula_supervisionado`),
   CONSTRAINT `supervisao_supervisionado_fk` FOREIGN KEY (`Matricula_supervisionado`) REFERENCES `funcionario` (`Matricula`),
   CONSTRAINT `supervisao_supervisor_fk` FOREIGN KEY (`Matricula_supervisor`) REFERENCES `funcionario` (`Matricula`)
@@ -952,12 +1039,12 @@ CREATE TABLE `supervisao` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `supervisao`
+-- Dumping data for table `supervisiona`
 --
 
-LOCK TABLES `supervisao` WRITE;
-/*!40000 ALTER TABLE `supervisao` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supervisao` ENABLE KEYS */;
+LOCK TABLES `supervisiona` WRITE;
+/*!40000 ALTER TABLE `supervisiona` DISABLE KEYS */;
+/*!40000 ALTER TABLE `supervisiona` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -968,9 +1055,9 @@ DROP TABLE IF EXISTS `supervisor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supervisor` (
-  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
-  PRIMARY KEY (`Matricula_funcionario`),
-  CONSTRAINT `funcionario_supervisor_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`Matricula`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  PRIMARY KEY (`funcionario_matricula`),
+  CONSTRAINT `fk_supervisor_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -991,9 +1078,9 @@ DROP TABLE IF EXISTS `tecnico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tecnico` (
-  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
-  PRIMARY KEY (`Matricula_funcionario`),
-  CONSTRAINT `funcionario_tecnico_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`Matricula`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  PRIMARY KEY (`funcionario_matricula`),
+  CONSTRAINT `fk_tecnico_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1014,10 +1101,10 @@ DROP TABLE IF EXISTS `tecnico_campo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tecnico_campo` (
-  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
-  `Telefone_movel` int(11) DEFAULT NULL,
-  PRIMARY KEY (`Matricula_funcionario`),
-  CONSTRAINT `funcionario_tecnico_campo_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`Matricula`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  `tel_movel` varchar(14) NOT NULL,
+  PRIMARY KEY (`funcionario_matricula`),
+  CONSTRAINT `fk_tecnico_campo_tecnico1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `tecnico` (`funcionario_matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1038,11 +1125,11 @@ DROP TABLE IF EXISTS `tecnico_interno`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tecnico_interno` (
-  `Matricula_funcionario` varchar(10) NOT NULL DEFAULT '',
-  `Ramal` int(11) DEFAULT NULL,
-  `Grau_tecnico` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Matricula_funcionario`),
-  CONSTRAINT `tecnico_interno_funcionario_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`Matricula`)
+  `funcionario_matricula` varchar(10) NOT NULL,
+  `Grau_tecnico` varchar(30) NOT NULL,
+  `Ramal` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`funcionario_matricula`),
+  CONSTRAINT `fk_tecnico_interno_tecnico1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `tecnico` (`funcionario_matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1064,7 +1151,7 @@ DROP TABLE IF EXISTS `tipo_contrato`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipo_contrato` (
   `ID_Tipo_Contrato` varchar(5) NOT NULL,
-  `Descrição` varchar(30) DEFAULT NULL,
+  `Descric` varchar(30) NOT NULL,
   PRIMARY KEY (`ID_Tipo_Contrato`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1087,11 +1174,8 @@ DROP TABLE IF EXISTS `tipo_despesa`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipo_despesa` (
   `ID` varchar(7) NOT NULL,
-  `Cod_Despesa` varchar(10) NOT NULL,
   `dsc` varchar(50) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `tipo_despesa_desp_viag_fk` (`Cod_Despesa`),
-  CONSTRAINT `tipo_despesa_desp_viag_fk` FOREIGN KEY (`Cod_Despesa`) REFERENCES `despesa_viagem` (`COD`)
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1113,11 +1197,8 @@ DROP TABLE IF EXISTS `tipo_servico`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tipo_servico` (
   `Cod_tipo_servico` varchar(15) NOT NULL DEFAULT '',
-  `Cod_servico` varchar(13) DEFAULT NULL,
   `Descricao` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Cod_tipo_servico`),
-  KEY `cod_servico_fk` (`Cod_servico`),
-  CONSTRAINT `cod_servico_fk` FOREIGN KEY (`Cod_servico`) REFERENCES `servico` (`COD`)
+  PRIMARY KEY (`Cod_tipo_servico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1131,31 +1212,6 @@ LOCK TABLES `tipo_servico` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `unid_suporte_tem_funcionario`
---
-
-DROP TABLE IF EXISTS `unid_suporte_tem_funcionario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `unid_suporte_tem_funcionario` (
-  `Cod_Unid_Sup` varchar(15) NOT NULL,
-  `Mat_Funcionario` varchar(10) NOT NULL,
-  PRIMARY KEY (`Cod_Unid_Sup`,`Mat_Funcionario`),
-  KEY `unid_suporte_multiv_fk_idx` (`Cod_Unid_Sup`),
-  CONSTRAINT `unid_suporte_multiv_fk` FOREIGN KEY (`Cod_Unid_Sup`) REFERENCES `unidade_de_suporte` (`COD`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `unid_suporte_tem_funcionario`
---
-
-LOCK TABLES `unid_suporte_tem_funcionario` WRITE;
-/*!40000 ALTER TABLE `unid_suporte_tem_funcionario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `unid_suporte_tem_funcionario` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `unidade_de_suporte`
 --
 
@@ -1163,17 +1219,18 @@ DROP TABLE IF EXISTS `unidade_de_suporte`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `unidade_de_suporte` (
-  `CNPJ_Empresa` varchar(14) NOT NULL,
-  `COD` varchar(15) NOT NULL,
+  `COD_Unid_Suporte` varchar(15) NOT NULL,
+  `CNPJ` varchar(18) NOT NULL,
+  `Nro_Funcionarios` int(11) NOT NULL,
   `Estado` varchar(10) NOT NULL,
-  `UF` varchar(2) NOT NULL,
-  `RazaoSocial` varchar(20) NOT NULL,
-  `Endereço` varchar(30) NOT NULL,
-  `Nome` varchar(15) DEFAULT NULL,
-  `Matriz` varchar(20) NOT NULL,
-  PRIMARY KEY (`COD`),
-  KEY `unid_sup_empresa_fk_idx` (`CNPJ_Empresa`),
-  CONSTRAINT `unid_sup_empresa_fk` FOREIGN KEY (`CNPJ_Empresa`) REFERENCES `empresa` (`CNPJ`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `nome` varchar(50) NOT NULL,
+  `matriz` varchar(20) NOT NULL,
+  `endereço` varchar(50) NOT NULL,
+  `fone` varchar(16) DEFAULT NULL,
+  PRIMARY KEY (`CNPJ`,`COD_Unid_Suporte`),
+  KEY `fk_unid_suporte_funcionario_fk` (`CNPJ`),
+  KEY `fk_unidade_de_suporte_empresa1_idx` (`CNPJ`),
+  CONSTRAINT `fk_unidade_de_suporte_empresa1` FOREIGN KEY (`CNPJ`) REFERENCES `empresa` (`CNPJ`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1183,6 +1240,7 @@ CREATE TABLE `unidade_de_suporte` (
 
 LOCK TABLES `unidade_de_suporte` WRITE;
 /*!40000 ALTER TABLE `unidade_de_suporte` DISABLE KEYS */;
+INSERT INTO `unidade_de_suporte` VALUES ('1375488','12.475.369/1254-05',88,'BA','Pretium Et Rutrum LLC','Dominic','7925 Sed St.','12355290-5923'),('1375499','12.475.369/1254-05',209,'Ceará','Eros LLP','Slade','P.O. Box 267, 8236 Ac Avenue','34759192-3965'),('1375489','12.475.369/1254-07',198,'São Paulo','Non Enim Incorporated','Elaine','457-2234 Eget, Rd.','59010869-3676'),('1375490','12.475.369/1254-08',258,'São Paulo','Aliquet Associates','Scott','P.O. Box 562, 7942 Bibendum Avenue','54962144-7332'),('1375491','12.475.369/1254-09',130,'Ceará','Eget Limited','Kiayada','2869 Gravida Rd.','70630423-4337'),('1375492','12.475.369/1254-10',122,'São Paulo','Sagittis Corp.','Ifeoma','P.O. Box 644, 2552 Non, Street','01975098-3356');
 /*!40000 ALTER TABLE `unidade_de_suporte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1203,4 +1261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-04 20:39:57
+-- Dump completed on 2017-08-06  2:10:33
