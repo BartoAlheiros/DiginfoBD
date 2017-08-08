@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `assistech` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `assistech`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: assistech
 -- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Server version	5.5.5-10.1.25-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,8 +56,7 @@ CREATE TABLE `adm_financeiro` (
   KEY `funcionario_adm_financeiro_idx_fk` (`Matricula_funcionario`),
   KEY `contracheque_admin_financeiro_fk` (`Cod_Contracheque`),
   KEY `fk_despesa_viagem_adm_financeiro1` (`Cod_Desp_Viag`),
-  CONSTRAINT `adm_financeiro_desp_viag_fk` FOREIGN KEY (`Cod_Desp_Viag`) REFERENCES `despesa_viagem` (`COD`),
-  CONSTRAINT `funcionario_adm_financeiro_fk` FOREIGN KEY (`Matricula_funcionario`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `adm_financeiro_desp_viag_fk` FOREIGN KEY (`Cod_Desp_Viag`) REFERENCES `despesa_viagem` (`COD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -401,8 +400,7 @@ CREATE TABLE `dependente` (
   `Data_Nascimento` date NOT NULL,
   `Parentesco` varchar(20) NOT NULL,
   `Idade` int(3) NOT NULL,
-  PRIMARY KEY (`Matricula_Func`,`Sequencial`),
-  CONSTRAINT `dependente_funcionario_fk` FOREIGN KEY (`Matricula_Func`) REFERENCES `funcionario` (`Matricula`)
+  PRIMARY KEY (`Matricula_Func`,`Sequencial`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -647,9 +645,9 @@ DROP TABLE IF EXISTS `funcionario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `funcionario` (
-  `matricula` varchar(10) NOT NULL DEFAULT '',
+  `matricula` varchar(13) NOT NULL DEFAULT '',
   `Cpf` varchar(14) NOT NULL,
-  `Matricula_supervisor` varchar(10) NOT NULL,
+  `Matricula_supervisor` varchar(13) NOT NULL,
   `unidade_de_suporte_CNPJ` varchar(18) NOT NULL,
   `Login` varchar(15) NOT NULL,
   `Senha` varchar(8) NOT NULL,
@@ -661,9 +659,7 @@ CREATE TABLE `funcionario` (
   PRIMARY KEY (`matricula`,`Cpf`),
   UNIQUE KEY `Matricula_UNIQUE` (`matricula`),
   KEY `fk_funcionario_unidade_de_suporte1_idx` (`unidade_de_suporte_CNPJ`),
-  KEY `fk_funcionario_supervisiona1_idx` (`Matricula_supervisor`),
   KEY `fk_funcionario_unidade_de_suporte_idx` (`unidade_de_suporte_CNPJ`),
-  CONSTRAINT `fk_funcionario_supervisiona1` FOREIGN KEY (`Matricula_supervisor`) REFERENCES `supervisiona` (`Matricula_supervisor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_funcionario_unid_suporte` FOREIGN KEY (`unidade_de_suporte_CNPJ`) REFERENCES `unidade_de_suporte` (`CNPJ`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -674,6 +670,7 @@ CREATE TABLE `funcionario` (
 
 LOCK TABLES `funcionario` WRITE;
 /*!40000 ALTER TABLE `funcionario` DISABLE KEYS */;
+INSERT INTO `funcionario` VALUES ('16840819-4846','1691072733799','Acevedo, H','12.475.369/1254-07','16431025-1907','Maggy','RPR58YMU1CU','74899','74899','dolor.vitae@',8);
 /*!40000 ALTER TABLE `funcionario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -805,9 +802,7 @@ CREATE TABLE `jornada_trabalho` (
   `Horario_Fim` int(11) NOT NULL,
   `Trabalha_Sabado` varchar(5) NOT NULL,
   `Descricao` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`ID`,`funcionario_matricula`),
-  KEY `fk_jornada_trabalho_funcionario1_idx` (`funcionario_matricula`),
-  CONSTRAINT `fk_jornada_trabalho_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`ID`,`funcionario_matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1031,10 +1026,7 @@ CREATE TABLE `supervisiona` (
   `Matricula_supervisor` varchar(10) NOT NULL DEFAULT '',
   `Matricula_supervisionado` varchar(10) NOT NULL DEFAULT '',
   `Data_inicio` date NOT NULL,
-  PRIMARY KEY (`Matricula_supervisor`,`Matricula_supervisionado`),
-  KEY `supervisao_supervisionado_fk` (`Matricula_supervisionado`),
-  CONSTRAINT `supervisao_supervisionado_fk` FOREIGN KEY (`Matricula_supervisionado`) REFERENCES `funcionario` (`Matricula`),
-  CONSTRAINT `supervisao_supervisor_fk` FOREIGN KEY (`Matricula_supervisor`) REFERENCES `funcionario` (`Matricula`)
+  PRIMARY KEY (`Matricula_supervisor`,`Matricula_supervisionado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1056,8 +1048,7 @@ DROP TABLE IF EXISTS `supervisor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supervisor` (
   `funcionario_matricula` varchar(10) NOT NULL,
-  PRIMARY KEY (`funcionario_matricula`),
-  CONSTRAINT `fk_supervisor_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`funcionario_matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1067,6 +1058,7 @@ CREATE TABLE `supervisor` (
 
 LOCK TABLES `supervisor` WRITE;
 /*!40000 ALTER TABLE `supervisor` DISABLE KEYS */;
+INSERT INTO `supervisor` VALUES ('16020110-0'),('16020909-9'),('16030723-1'),('16030910-9'),('16031120-9'),('16040225-2'),('16040324-6'),('16050614-0'),('16080614-7'),('16080618-4'),('16110117-3'),('16110128-8'),('16120208-1'),('16121128-4'),('16130703-6'),('16131212-4'),('16141013-5'),('16150120-7'),('16150912-1'),('16180902-6'),('16190315-6'),('16220620-5'),('16220702-1'),('16220726-8'),('16230222-8'),('16260101-7'),('16270626-2'),('16270707-0'),('16270710-5'),('16290215-5'),('16340225-7'),('16340907-9'),('16350815-4'),('16370607-1'),('16380717-0'),('16380819-6'),('16390711-9'),('16400314-5'),('16400318-2'),('16401004-2'),('16420114-6'),('16420524-9'),('16430904-7'),('16431025-1'),('16431106-4'),('16450806-8'),('16460409-9'),('16470418-0'),('16471122-0'),('16520407-1'),('16520828-9'),('16540825-5'),('16540913-4'),('16540921-5'),('16541018-9'),('16541210-8'),('16551208-4'),('16560728-3'),('16570703-3'),('16580316-5'),('16611126-9'),('16620828-2'),('16630122-0'),('16640202-3'),('16660118-2'),('16670110-4'),('16670207-7'),('16670624-1'),('16680821-1'),('16690814-5'),('16691205-9'),('16720811-5'),('16761219-3'),('16790116-5'),('16790328-1'),('16800117-8'),('16801008-8'),('16801120-0'),('16810925-9'),('16820329-4'),('16821219-8'),('16840819-4'),('16840826-7'),('16850522-0'),('16860906-5'),('16861122-6'),('16880118-5'),('16880403-0'),('16890508-0'),('16900925-2'),('16901030-6'),('16910605-0'),('16920325-6'),('16920402-7'),('16931209-1'),('16951018-2'),('16970509-6'),('16980113-0'),('16990122-0'),('16990402-9');
 /*!40000 ALTER TABLE `supervisor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1079,8 +1071,7 @@ DROP TABLE IF EXISTS `tecnico`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tecnico` (
   `funcionario_matricula` varchar(10) NOT NULL,
-  PRIMARY KEY (`funcionario_matricula`),
-  CONSTRAINT `fk_tecnico_funcionario1` FOREIGN KEY (`funcionario_matricula`) REFERENCES `funcionario` (`matricula`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`funcionario_matricula`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1261,4 +1252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-06  2:10:33
+-- Dump completed on 2017-08-07 21:31:39
