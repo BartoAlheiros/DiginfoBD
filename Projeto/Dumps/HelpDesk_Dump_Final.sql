@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `assistech` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `assistech`;
--- MySQL dump 10.13  Distrib 5.7.12, for Win32 (AMD64)
+-- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: assistech
 -- ------------------------------------------------------
--- Server version	5.7.18-log
+-- Server version	5.6.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -415,9 +415,12 @@ CREATE TABLE `contrato` (
   `Data_inicio` date NOT NULL,
   `Data_fim` date NOT NULL,
   `Status_contrato` varchar(58) NOT NULL,
-  PRIMARY KEY (`Cod_contrato`,`Cnpj_Unidade_suporte`,`Id_tipo_contrato`),
+  `Cod_cliente` int(11) NOT NULL,
+  PRIMARY KEY (`Cod_contrato`,`Cnpj_Unidade_suporte`,`Id_tipo_contrato`,`Cod_cliente`),
   KEY `contrato_tipo_contrato_fk` (`Id_tipo_contrato`),
   KEY `contrato_unidade_suporte_fk` (`Cnpj_Unidade_suporte`),
+  KEY `contrato_cliente_jur_fk` (`Cod_cliente`),
+  CONSTRAINT `contrato_cliente_jur_fk` FOREIGN KEY (`Cod_cliente`) REFERENCES `cliente_jur` (`Cod_cliente`),
   CONSTRAINT `contrato_tipo_contrato_fk` FOREIGN KEY (`Id_tipo_contrato`) REFERENCES `tipo_contrato` (`Id`),
   CONSTRAINT `contrato_unidade_suporte_fk` FOREIGN KEY (`Cnpj_Unidade_suporte`) REFERENCES `unidade_de_suporte` (`CNPJ`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -440,6 +443,7 @@ DROP TABLE IF EXISTS `dependente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dependente` (
+  `Nome` varchar(50) NOT NULL,
   `Sequencial` int(10) NOT NULL DEFAULT '0',
   `Matricula_funcionario` varchar(13) NOT NULL DEFAULT '',
   `Sexo` varchar(1) NOT NULL,
@@ -674,7 +678,7 @@ CREATE TABLE `fornece` (
   `Data_inicio` date NOT NULL,
   `Data_fim` date NOT NULL,
   `Valor_unitario` float(4,2) NOT NULL,
-  PRIMARY KEY (`Cnpj_Fornecedor`),
+  PRIMARY KEY (`Cnpj_Fornecedor`,`Cod_Insumo`),
   KEY `Cod_Insumo_fk` (`Cod_Insumo`),
   CONSTRAINT `Cnpj_Fornecedor_fk` FOREIGN KEY (`Cnpj_Fornecedor`) REFERENCES `fornecedor` (`Cnpj`),
   CONSTRAINT `Cod_Insumo_fk` FOREIGN KEY (`Cod_Insumo`) REFERENCES `insumo` (`Cod`)
@@ -1204,8 +1208,8 @@ DROP TABLE IF EXISTS `tecnico_interno`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tecnico_interno` (
   `matricula` varchar(13) NOT NULL DEFAULT '',
-  `Ramall` varchar(20) DEFAULT NULL,
-  `Grau_tec` varchar(30) DEFAULT NULL,
+  `Ramall` varchar(4) NOT NULL,
+  `Grau_tec` varchar(30) NOT NULL,
   PRIMARY KEY (`matricula`),
   CONSTRAINT `tec_interno_tecnico_fk` FOREIGN KEY (`matricula`) REFERENCES `tecnico` (`Matricula_tecnico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1359,4 +1363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-10 11:30:05
+-- Dump completed on 2017-08-10 21:43:31
