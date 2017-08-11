@@ -322,7 +322,7 @@ CONSTRAINT contrato_unidade_suporte_fk FOREIGN KEY (Cnpj_Unidade_suporte) refere
 CREATE TABLE EQUIPAMENTO(
 Cod VARCHAR(15),
 Data_entrada DATE NOT NULL,
-Setor VARCHAR(10) NOT NULL,
+Setor VARCHAR(30) NOT NULL,
 historico VARCHAR(80) NOT NULL,
 Fabricante VARCHAR(20) NOT NULL,
 Estado VARCHAR(15) NOT NULL,
