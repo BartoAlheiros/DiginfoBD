@@ -188,7 +188,7 @@ PRIMARY KEY(Id)
 
 CREATE TABLE DESPESA_VIAGEM ( 
 Cod VARCHAR(10), 
-Valor INT NOT NULL, 
+Valor FLOAT(4,2) NOT NULL,
 Id_tipo_despesa INT NOT NULL, 
 Mat_adm_financeiro VARCHAR(13) NOT NULL UNIQUE, 
 Sequencial_chamado INT(11) NOT NULL,  
@@ -200,16 +200,14 @@ CONSTRAINT chamado_fk FOREIGN KEY(Sequencial_chamado) references ATENDE(Sequenci
 CONSTRAINT tec_campo_fk FOREIGN KEY(Mat_tec_campo) references ATENDE (Mat_tec_campo)
 );
 
-ALTER TABLE DESPESA_VIAGEM
-	CHANGE COLUMN Valor Valor FLOAT(4,2) NOT NULL;
-
 CREATE TABLE KPI ( 
-Sequencial INT(11), 
-Matricula_tecnico VARCHAR(10), 
-KPI_1 VARCHAR(30), 
-KPI_2 VARCHAR(30), 
-Dsc_KPI_1 VARCHAR(100), 
-Dsk_KPI_2 VARCHAR(100),
+Sequencial INT, 
+Matricula_tecnico VARCHAR(13), 
+KPI_1 INT NOT NULL, 
+KPI_2 INT NOT NULL, 
+Dsc_KPI_1 VARCHAR(100) NOT NULL, 
+Dsk_KPI_2 VARCHAR(100) NOT NULL,
+CONSTRAINT PRIMARY KEY(Sequencial, Matricula_tecnico),
 CONSTRAINT kpi_tecnico_fk FOREIGN KEY(Matricula_tecnico) references TECNICO (Matricula_tecnico)
 );
 
@@ -222,7 +220,7 @@ CONSTRAINT PRIMARY KEY(Cod)
 CREATE TABLE SERVICO ( 
 Cod INT, 
 Descricao VARCHAR(255) NOT NULL, 
-Valor INT NOT NULL, 
+Valor FLOAT(4,2) NOT NULL, 
 Status_ VARCHAR(255) NOT NULL, 
 Cod_Tipo_Servico INT NOT NULL,
 Num_OS INT NOT NULL UNIQUE,
@@ -237,7 +235,7 @@ Descricao VARCHAR(255) NOT NULL,
 Procedimento VARCHAR(1023) NOT NULL, 
 Solucao VARCHAR(1023) NOT NULL, 
 Data_entrada DATE NOT NULL, 
-Tempo_necessario INT NOT NULL, 
+Tempo_necessario FLOAT(4,2) NOT NULL, 
 obs VARCHAR(1023) NOT NULL, 
 Id_relacionado INT NOT NULL, 
 Cod_servico INT NOT NULL,
