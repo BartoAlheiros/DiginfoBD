@@ -129,7 +129,7 @@ CREATE TABLE `base_problemas_kb` (
   `Procedimento` varchar(1023) NOT NULL,
   `Solucao` varchar(1023) NOT NULL,
   `Data_entrada` date NOT NULL,
-  `Tempo_necessario` int(11) NOT NULL,
+  `Tempo_necessario` float(4,2) NOT NULL,
   `obs` varchar(1023) NOT NULL,
   `Id_relacionado` int(11) NOT NULL,
   `Cod_servico` int(11) NOT NULL,
@@ -912,14 +912,14 @@ DROP TABLE IF EXISTS `kpi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kpi` (
-  `Sequencial` int(11) DEFAULT NULL,
-  `Matricula_tecnico` varchar(10) DEFAULT NULL,
-  `KPI_1` varchar(30) DEFAULT NULL,
-  `KPI_2` varchar(30) DEFAULT NULL,
-  `Dsc_KPI_1` varchar(100) DEFAULT NULL,
-  `Dsk_KPI_2` varchar(100) DEFAULT NULL,
-  KEY `kpi_tecnico_fk` (`Matricula_tecnico`),
-  CONSTRAINT `kpi_tecnico_fk` FOREIGN KEY (`Matricula_tecnico`) REFERENCES `tecnico` (`Matricula_tecnico`)
+  `Sequencial` int(11) NOT NULL,
+  `Matricula_tecnico` varchar(13) NOT NULL DEFAULT '',
+  `KPI_1` int(11) NOT NULL,
+  `KPI_2` int(11) NOT NULL,
+  `Dsc_KPI_1` varchar(100) NOT NULL,
+  `Dsk_KPI_2` varchar(100) NOT NULL,
+  PRIMARY KEY (`Sequencial`,`Matricula_tecnico`),
+  KEY `kpi_tecnico_fk` (`Matricula_tecnico`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1059,7 +1059,7 @@ DROP TABLE IF EXISTS `servico`;
 CREATE TABLE `servico` (
   `Cod` int(11) NOT NULL,
   `Descricao` varchar(255) NOT NULL,
-  `Valor` int(11) NOT NULL,
+  `Valor` float(4,2) NOT NULL,
   `Status_` varchar(255) NOT NULL,
   `Cod_Tipo_Servico` int(11) NOT NULL,
   `Num_OS` int(11) NOT NULL,
@@ -1363,4 +1363,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-11 12:51:19
+-- Dump completed on 2017-08-11 16:28:45
