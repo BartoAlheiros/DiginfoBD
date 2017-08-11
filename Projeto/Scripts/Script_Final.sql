@@ -200,6 +200,9 @@ CONSTRAINT chamado_fk FOREIGN KEY(Sequencial_chamado) references ATENDE(Sequenci
 CONSTRAINT tec_campo_fk FOREIGN KEY(Mat_tec_campo) references ATENDE (Mat_tec_campo)
 );
 
+ALTER TABLE DESPESA_VIAGEM
+	CHANGE COLUMN Valor Valor FLOAT(4,2) NOT NULL;
+
 CREATE TABLE KPI ( 
 Sequencial INT(11), 
 Matricula_tecnico VARCHAR(10), 
