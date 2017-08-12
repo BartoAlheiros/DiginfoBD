@@ -145,12 +145,17 @@ Mat_tec_campo VARCHAR(13),
 Mat_tec_interno VARCHAR(13), 
 Mat_atend VARCHAR(13), 
 Num_ordem_servico INT,
+Dta_abertura DATE NOT NULL,
+Cod_cliente INT NOT NULL,
 PRIMARY KEY(Sequencial),
 CONSTRAINT chamado_supervisor_fk FOREIGN KEY(Mat_supervisor) references SUPERVISOR(matricula),
 CONSTRAINT chamado_tec_campo_fk FOREIGN KEY(Mat_tec_campo) references TECNICO_CAMPO(matricula),
 CONSTRAINT chamado_tec_interno_fk FOREIGN KEY(Mat_tec_interno) references TECNICO_INTERNO(matricula),
-CONSTRAINT chamado_atend_sol_direc_fk FOREIGN KEY(Mat_atend) references ATENDENTE_SOLUCIONADOR_DIRECIONADOR(matricula) 
+CONSTRAINT chamado_atend_sol_direc_fk FOREIGN KEY(Mat_atend) references ATENDENTE_SOLUCIONADOR_DIRECIONADOR(matricula), 
+CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod)
 );
+
+ALTER TABLE CHAMADO ADD CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod);
 
 CREATE TABLE ORDEM_SERVICO ( 
 Num INT, 
@@ -271,14 +276,17 @@ CONSTRAINT PRIMARY KEY(Cod_Cliente),
 CONSTRAINT cliente_jur_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod)
 );
 
-CREATE TABLE CLIENTE_FIS ( 
+ALTER TABLE CLIENTE_JUR
+	CHANGE COLUMN Cod_cliente Cod_cliente INT,
+	ADD CONSTRAINT cliente_jur_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod);
+
+CREATE TABLE CLIENTE_FISICO ( 
 Cod_cliente INT, 
 Cpf VARCHAR(11) NOT NULL, 
 Nome VARCHAR(255) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod_Cliente),
 CONSTRAINT cliente_fis_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod)
 );
-
 
 CREATE TABLE FATURA ( 
 Cod INT, 
@@ -339,22 +347,14 @@ CONSTRAINT envolveu_os_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVIC
 CONSTRAINT envolve_equipamento_fk FOREIGN KEY ( Cod_equipamento ) references EQUIPAMENTO(Cod)
 );
 
-CREATE TABLE CLIE_ABRE ( 
-Cod BIGINT(12), 
-Dta_abertura DATE NOT NULL, 
-Cod_Cliente INT NOT NULL,
-CONSTRAINT PRIMARY KEY (Cod),
-CONSTRAINT clie_abre_cliente_fk FOREIGN KEY(Cod_Cliente) references CLIENTE(Cod)
-);
-
 CREATE TABLE PARCELA_PAGAMENTO ( 
 Sequencial INT, 
 Cod_fatura INT, 
 Data_pagamento DATE NOT NULL, 
 Data_parcela DATE NOT NULL, 
 Juros FLOAT(2,2) NOT NULL, 
-Valor_total INT NOT NULL, 
-Valor_pagamento_parcelado INT NOT NULL, 
+Valor_total FLOAT(4,2) NOT NULL, 
+Valor_pagamento_parcelado FLOAT(4,2) NOT NULL, 
 CONSTRAINT PRIMARY KEY (Sequencial, Cod_fatura),
 CONSTRAINT parcela_pagamento_fatura_fk FOREIGN KEY ( Cod_fatura ) references FATURA ( Cod )
 );
