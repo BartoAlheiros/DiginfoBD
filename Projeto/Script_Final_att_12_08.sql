@@ -145,12 +145,17 @@ Mat_tec_campo VARCHAR(13),
 Mat_tec_interno VARCHAR(13), 
 Mat_atend VARCHAR(13), 
 Num_ordem_servico INT,
+Dta_abertura DATE NOT NULL,
+Cod_cliente INT NOT NULL,
 PRIMARY KEY(Sequencial),
 CONSTRAINT chamado_supervisor_fk FOREIGN KEY(Mat_supervisor) references SUPERVISOR(matricula),
 CONSTRAINT chamado_tec_campo_fk FOREIGN KEY(Mat_tec_campo) references TECNICO_CAMPO(matricula),
 CONSTRAINT chamado_tec_interno_fk FOREIGN KEY(Mat_tec_interno) references TECNICO_INTERNO(matricula),
-CONSTRAINT chamado_atend_sol_direc_fk FOREIGN KEY(Mat_atend) references ATENDENTE_SOLUCIONADOR_DIRECIONADOR(matricula) 
+CONSTRAINT chamado_atend_sol_direc_fk FOREIGN KEY(Mat_atend) references ATENDENTE_SOLUCIONADOR_DIRECIONADOR(matricula), 
+CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod)
 );
+
+ALTER TABLE CHAMADO ADD CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod);
 
 CREATE TABLE ORDEM_SERVICO ( 
 Num INT, 
@@ -188,7 +193,7 @@ PRIMARY KEY(Id)
 
 CREATE TABLE DESPESA_VIAGEM ( 
 Cod VARCHAR(10), 
-Valor INT NOT NULL, 
+Valor FLOAT(4,2) NOT NULL,
 Id_tipo_despesa INT NOT NULL, 
 Mat_adm_financeiro VARCHAR(13) NOT NULL UNIQUE, 
 Sequencial_chamado INT(11) NOT NULL,  
@@ -201,12 +206,13 @@ CONSTRAINT tec_campo_fk FOREIGN KEY(Mat_tec_campo) references ATENDE (Mat_tec_ca
 );
 
 CREATE TABLE KPI ( 
-Sequencial INT(11), 
-Matricula_tecnico VARCHAR(10), 
-KPI_1 VARCHAR(30), 
-KPI_2 VARCHAR(30), 
-Dsc_KPI_1 VARCHAR(100), 
-Dsk_KPI_2 VARCHAR(100),
+Sequencial INT, 
+Matricula_tecnico VARCHAR(13), 
+KPI_1 INT NOT NULL, 
+KPI_2 INT NOT NULL, 
+Dsc_KPI_1 VARCHAR(100) NOT NULL, 
+Dsk_KPI_2 VARCHAR(100) NOT NULL,
+CONSTRAINT PRIMARY KEY(Sequencial, Matricula_tecnico),
 CONSTRAINT kpi_tecnico_fk FOREIGN KEY(Matricula_tecnico) references TECNICO (Matricula_tecnico)
 );
 
@@ -219,7 +225,7 @@ CONSTRAINT PRIMARY KEY(Cod)
 CREATE TABLE SERVICO ( 
 Cod INT, 
 Descricao VARCHAR(255) NOT NULL, 
-Valor INT NOT NULL, 
+Valor FLOAT(4,2) NOT NULL, 
 Status_ VARCHAR(255) NOT NULL, 
 Cod_Tipo_Servico INT NOT NULL,
 Num_OS INT NOT NULL UNIQUE,
@@ -234,7 +240,7 @@ Descricao VARCHAR(255) NOT NULL,
 Procedimento VARCHAR(1023) NOT NULL, 
 Solucao VARCHAR(1023) NOT NULL, 
 Data_entrada DATE NOT NULL, 
-Tempo_necessario INT NOT NULL, 
+Tempo_necessario FLOAT(4,2) NOT NULL, 
 obs VARCHAR(1023) NOT NULL, 
 Id_relacionado INT NOT NULL, 
 Cod_servico INT NOT NULL,
@@ -270,14 +276,13 @@ CONSTRAINT PRIMARY KEY(Cod_Cliente),
 CONSTRAINT cliente_jur_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod)
 );
 
-CREATE TABLE CLIENTE_FIS ( 
+CREATE TABLE CLIENTE_FISICO ( 
 Cod_cliente INT, 
 Cpf VARCHAR(11) NOT NULL, 
 Nome VARCHAR(255) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod_Cliente),
 CONSTRAINT cliente_fis_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod)
 );
-
 
 CREATE TABLE FATURA ( 
 Cod INT, 
@@ -288,7 +293,6 @@ Cod_cliente INT NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod), 
 CONSTRAINT fatura_cliente_fk FOREIGN KEY(Cod_cliente) references CLIENTE(Cod)
 );
-
 
 CREATE TABLE ALMOXARIFADO ( 
 Id INT, 
@@ -321,7 +325,7 @@ CONSTRAINT contrato_unidade_suporte_fk FOREIGN KEY (Cnpj_Unidade_suporte) refere
 CREATE TABLE EQUIPAMENTO(
 Cod VARCHAR(15),
 Data_entrada DATE NOT NULL,
-Setor VARCHAR(10) NOT NULL,
+Setor VARCHAR(30) NOT NULL,
 historico VARCHAR(80) NOT NULL,
 Fabricante VARCHAR(20) NOT NULL,
 Estado VARCHAR(15) NOT NULL,
@@ -338,22 +342,14 @@ CONSTRAINT envolveu_os_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVIC
 CONSTRAINT envolve_equipamento_fk FOREIGN KEY ( Cod_equipamento ) references EQUIPAMENTO(Cod)
 );
 
-CREATE TABLE CLIE_ABRE ( 
-Cod BIGINT(12), 
-Dta_abertura DATE NOT NULL, 
-Cod_Cliente INT NOT NULL,
-CONSTRAINT PRIMARY KEY (Cod),
-CONSTRAINT clie_abre_cliente_fk FOREIGN KEY(Cod_Cliente) references CLIENTE(Cod)
-);
-
 CREATE TABLE PARCELA_PAGAMENTO ( 
 Sequencial INT, 
 Cod_fatura INT, 
 Data_pagamento DATE NOT NULL, 
 Data_parcela DATE NOT NULL, 
 Juros FLOAT(2,2) NOT NULL, 
-Valor_total INT NOT NULL, 
-Valor_pagamento_parcelado INT NOT NULL, 
+Valor_total FLOAT(4,2) NOT NULL, 
+Valor_pagamento_parcelado FLOAT(4,2) NOT NULL, 
 CONSTRAINT PRIMARY KEY (Sequencial, Cod_fatura),
 CONSTRAINT parcela_pagamento_fatura_fk FOREIGN KEY ( Cod_fatura ) references FATURA ( Cod )
 );
@@ -363,6 +359,8 @@ Cod VARCHAR(20),
 Descricao VARCHAR(80) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod)
 );
+
+#mudar Cod para int
  
 CREATE TABLE SOLICITA(
 Mat_supervisor VARCHAR(13),
@@ -458,7 +456,7 @@ CONSTRAINT Cod_Insumo_fk FOREIGN KEY(Cod_Insumo) references INSUMO(Cod)
 
 CREATE TABLE END_FORNECEDOR(
 Cnpj_Fornecedor BIGINT(14),
-Endereco VARCHAR(30),
+Endereco VARCHAR(80),
 CONSTRAINT PRIMARY KEY(Cnpj_Fornecedor, Endereco),
 CONSTRAINT end_fornecedor_fk FOREIGN KEY(Cnpj_Fornecedor) references FORNECEDOR(Cnpj)
 );

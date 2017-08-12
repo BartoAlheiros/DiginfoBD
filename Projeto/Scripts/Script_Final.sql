@@ -276,10 +276,6 @@ CONSTRAINT PRIMARY KEY(Cod_Cliente),
 CONSTRAINT cliente_jur_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod)
 );
 
-ALTER TABLE CLIENTE_JUR
-	CHANGE COLUMN Cod_cliente Cod_cliente INT,
-	ADD CONSTRAINT cliente_jur_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(Cod);
-
 CREATE TABLE CLIENTE_FISICO ( 
 Cod_cliente INT, 
 Cpf VARCHAR(11) NOT NULL, 
@@ -297,7 +293,6 @@ Cod_cliente INT NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod), 
 CONSTRAINT fatura_cliente_fk FOREIGN KEY(Cod_cliente) references CLIENTE(Cod)
 );
-
 
 CREATE TABLE ALMOXARIFADO ( 
 Id INT, 
@@ -364,6 +359,8 @@ Cod VARCHAR(20),
 Descricao VARCHAR(80) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod)
 );
+
+#mudar Cod para int
  
 CREATE TABLE SOLICITA(
 Mat_supervisor VARCHAR(13),
@@ -459,7 +456,7 @@ CONSTRAINT Cod_Insumo_fk FOREIGN KEY(Cod_Insumo) references INSUMO(Cod)
 
 CREATE TABLE END_FORNECEDOR(
 Cnpj_Fornecedor BIGINT(14),
-Endereco VARCHAR(30),
+Endereco VARCHAR(80),
 CONSTRAINT PRIMARY KEY(Cnpj_Fornecedor, Endereco),
 CONSTRAINT end_fornecedor_fk FOREIGN KEY(Cnpj_Fornecedor) references FORNECEDOR(Cnpj)
 );
