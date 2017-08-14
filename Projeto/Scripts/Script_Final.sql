@@ -4,20 +4,21 @@ use assistech;
 CREATE TABLE EMPRESA ( 
 CNPJ BIGINT(14) UNSIGNED,
 Razao_social VARCHAR(20) NOT NULL UNIQUE, 
-Endereco VARCHAR(30) NOT NULL, 
+Endereco VARCHAR(60) NOT NULL, 
 Fone VARCHAR(15) NOT NULL, 
-estado VARCHAR(50),
+estado VARCHAR(50) NOT NULL,
 CONSTRAINT PRIMARY KEY(CNPJ)
 );
 
 CREATE TABLE UNIDADE_DE_SUPORTE ( 
+Cod VARCHAR(15),
 CNPJ BIGINT(14) UNSIGNED, 
 Nro_funcionarios INT, 
 Nome VARCHAR(50) NOT NULL, 
 Matriz VARCHAR(20) NOT NULL, 
 endereco VARCHAR(50) NOT NULL UNIQUE,
 FONE VARCHAR(16) NOT NULL,
-CONSTRAINT PRIMARY KEY(CNPJ),
+CONSTRAINT PRIMARY KEY(Cod, CNPJ),
 CONSTRAINT fk_unid_suporte_empresa FOREIGN KEY(CNPJ) REFERENCES EMPRESA(CNPJ)
 );
 
@@ -33,7 +34,7 @@ CREATE TABLE FUNCIONARIO (
 Matricula VARCHAR(13), 
 CPF BIGINT(11) NOT NULL UNIQUE, 
 Matricula_supervisor VARCHAR(13) NOT NULL, 
-CNPJ BIGINT(14) UNSIGNED NOT NULL UNIQUE, 
+CNPJ_empresa BIGINT(14) UNSIGNED NOT NULL UNIQUE, 
 Login VARCHAR(15) NOT NULL UNIQUE, 
 Senha VARCHAR(15) NOT NULL UNIQUE, 
 Nome VARCHAR(30), 
@@ -41,11 +42,14 @@ Cod_Contracheque BIGINT UNSIGNED UNIQUE,
 Email VARCHAR(50) UNIQUE, 
 Carga_hora INT(2),
 CONSTRAINT PRIMARY KEY(Matricula),
-CONSTRAINT funcionario_unid_sup_fk FOREIGN KEY (CNPJ) REFERENCES UNIDADE_DE_SUPORTE (CNPJ)
+CONSTRAINT funcionario_unid_sup_fk FOREIGN KEY (CNPJ_empresa) REFERENCES UNIDADE_DE_SUPORTE (CNPJ),
+CONSTRAINT funcionario_supervisiona_fk FOREIGN KEY(Matricula_supervisor) REFERENCES SUPERVISIONA(Matricula_supervisor)
 );
 
 ALTER TABLE FUNCIONARIO
-	ADD CONSTRAINT funcionario_supervisiona_fk FOREIGN KEY(Matricula_supervisor) REFERENCES SUPERVISIONA(Matricula_supervisor);
+	DROP COLUMN CNPJ,
+    ADD COLUMN CNPJ_empresa BIGINT(14) NOT NULL,
+	ADD CONSTRAINT funcionario_unid_sup_fk FOREIGN KEY (CNPJ_empresa) REFERENCES UNIDADE_DE_SUPORTE (CNPJ);
 
 CREATE TABLE SUPERVISOR ( 
 matricula VARCHAR(13),
@@ -62,7 +66,7 @@ CONSTRAINT tecnico_funcionario_fk FOREIGN KEY(Matricula_tecnico) references FUNC
 
 CREATE TABLE TECNICO_CAMPO ( 
 matricula VARCHAR(13), 
-tel_movel VARCHAR(14) UNIQUE,
+tel_movel VARCHAR(30) UNIQUE,
 CONSTRAINT PRIMARY KEY(matricula),
 CONSTRAINT tecnico_campo_tecnico_fk FOREIGN KEY(matricula) references TECNICO(Matricula_tecnico)
  );
@@ -84,7 +88,8 @@ CONSTRAINT tec_interno_tecnico_fk FOREIGN KEY(matricula) references TECNICO (Mat
 
 CREATE TABLE DEPENDENTE ( 
 Sequencial INT(10), 
-Matricula_funcionario VARCHAR(13), 
+Matricula_funcionario VARCHAR(13),
+Nome VARCHAR(50) NOT NULL, 
 Sexo VARCHAR(1) NOT NULL, 
 Data_nascimento DATE NOT NULL, 
 Parentesco VARCHAR(20) NOT NULL, 
@@ -112,10 +117,10 @@ CONSTRAINT adm_financeiro_func_fk FOREIGN KEY(Matricula) references FUNCIONARIO(
 
 CREATE TABLE CONTRACHEQUE ( 
 Codigo VARCHAR(14), 
-Horas_extras SMALLINT UNSIGNED NOT NULL, 
-Salario_Base INT(9) NOT NULL, 
-Adicional_Salario INT(9), 
-Dta DATE NOT NULL, 
+Horas_extras TIME NOT NULL, 
+Salario_Base DECIMAL(6,2) NOT NULL, 
+Adicional_Salario DECIMAL(6,2) DEFAULT 0.00 NOT NULL, 
+Data_ DATE NOT NULL, 
 Matricula_Funcionario VARCHAR(13) NOT NULL UNIQUE,
 Matricula_adm_financeiro VARCHAR(13) NOT NULL UNIQUE, 
 CONSTRAINT PRIMARY KEY(Codigo),
@@ -359,8 +364,6 @@ Cod VARCHAR(20),
 Descricao VARCHAR(80) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod)
 );
-
-#mudar Cod para int
  
 CREATE TABLE SOLICITA(
 Mat_supervisor VARCHAR(13),
