@@ -1,7 +1,8 @@
 /**
- * @author Bartô Alheiros
+ * @author Bartï¿½ Alheiros
  * Olinda, 15 de julho de 2017.
- * Programa que lê de um arquivo .csv e devolve código para popular tabela SQL com os dados.
+ * Programa que lÃª de um arquivo .csv e devolve cÃ³digo para popular tabela SQL com os dados.
+ * Utilzando a funÃ§Ã£o SQL INSERT INTO TABLE
  */
 package populartabelasql;
 
@@ -11,22 +12,27 @@ public class Main_PopularTabelaSQL{
 
 	public static void main(String[] args) throws IOException {
             String linha;
+            String table = "CONTRACHEQUE";
+            String srcArchive = "Excel_BD.ods - CONTRACHEQUE (1).csv";
+            String dstArchive = table + ".sql";
+            String pathSrc = "C:\\Users\\BartÃ´\\Downloads\\" + srcArchive;
+            String pathDst = "C:\\Users\\BartÃ´\\Desktop\\" + dstArchive;
             
-            FileReader reader = new FileReader("C:\\Users\\Bartô\\Downloads\\data2.csv");
-            BufferedReader leitor = new BufferedReader(reader);
-            FileWriter writer = new FileWriter("C:\\Users\\Bartô\\Desktop\\data2_SQL.txt");
-            BufferedWriter escritor = new BufferedWriter(writer);
+            FileReader reader = new FileReader(pathSrc);
+            BufferedReader bfReader = new BufferedReader(reader);
+            FileWriter writer = new FileWriter(pathDst);
+            BufferedWriter bfWriter = new BufferedWriter(writer);
             
-            while((linha = leitor.readLine()) != null) {
-                escritor.write("INSERT INTO unidade_de_suporte");
-                escritor.newLine();
-                escritor.write("VALUES("+linha+");");
-                for(int i = 1; i < 3; i++)
-                    escritor.newLine();         //pula duas linhas
+            while((linha = bfReader.readLine()) != null) {
+                bfWriter.write("INSERT INTO " + table + " "); bfWriter.write("VALUES("+linha+");");
+                bfWriter.newLine(); //pula duas linhas
+                bfWriter.newLine(); 
             }    
 
-            leitor.close(); /* Tinha esquecido dessa linha */
-            escritor.close();
+            bfReader.close(); /* Tinha esquecido dessa linha */
+            bfWriter.close();
+            reader.close();
+            writer.close();
 }
 
 }
