@@ -8,7 +8,7 @@ INTO TABLE CONTRACHEQUE
 FIELDS ENCLOSED BY '\'' TERMINATED BY ','
 ;
 
-select * from DESPESA_VIAGEM;
+select * from SERVICO;
 
 -- habilita de novo a checagem de restrições de chaves estrangeiras
 SET FOREIGN_KEY_CHECKS = 1;

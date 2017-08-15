@@ -200,8 +200,8 @@ CONSTRAINT tec_campo_fk FOREIGN KEY(Mat_tec_campo) references ATENDE (Mat_tec_ca
 );
 
 CREATE TABLE KPI ( 
-Sequencial INT, 
 Matricula_tecnico VARCHAR(13), 
+Sequencial INT, 
 KPI_1 INT NOT NULL, 
 KPI_2 INT NOT NULL, 
 Dsc_KPI_1 VARCHAR(100) NOT NULL, 
