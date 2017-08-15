@@ -46,11 +46,6 @@ CONSTRAINT funcionario_unid_sup_fk FOREIGN KEY (CNPJ_empresa) REFERENCES UNIDADE
 CONSTRAINT funcionario_supervisiona_fk FOREIGN KEY(Matricula_supervisor) REFERENCES SUPERVISIONA(Matricula_supervisor)
 );
 
-ALTER TABLE FUNCIONARIO
-	DROP COLUMN CNPJ,
-    ADD COLUMN CNPJ_empresa BIGINT(14) NOT NULL,
-	ADD CONSTRAINT funcionario_unid_sup_fk FOREIGN KEY (CNPJ_empresa) REFERENCES UNIDADE_DE_SUPORTE (CNPJ);
-
 CREATE TABLE SUPERVISOR ( 
 matricula VARCHAR(13),
 CONSTRAINT PRIMARY KEY(matricula),
@@ -136,7 +131,8 @@ ultima_data DATE NOT NULL,
 Descricao VARCHAR(255) NOT NULL, 
 Data_abertura DATE NOT NULL, 
 Num_OS INT NOT NULL UNIQUE,
-CONSTRAINT PRIMARY KEY(Cod)
+CONSTRAINT PRIMARY KEY(Cod),
+CONSTRAINT orcamento_os_fk FOREIGN KEY(Num_OS) references ORDEM_SERVICO(Num)
 );
 
 CREATE TABLE CHAMADO ( 
@@ -157,10 +153,9 @@ CONSTRAINT chamado_supervisor_fk FOREIGN KEY(Mat_supervisor) references SUPERVIS
 CONSTRAINT chamado_tec_campo_fk FOREIGN KEY(Mat_tec_campo) references TECNICO_CAMPO(matricula),
 CONSTRAINT chamado_tec_interno_fk FOREIGN KEY(Mat_tec_interno) references TECNICO_INTERNO(matricula),
 CONSTRAINT chamado_atend_sol_direc_fk FOREIGN KEY(Mat_atend) references ATENDENTE_SOLUCIONADOR_DIRECIONADOR(matricula), 
-CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod)
+CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod),
+CONSTRAINT chamado_ordem_servico_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVICO(Num)
 );
-
-ALTER TABLE CHAMADO ADD CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod);
 
 CREATE TABLE ORDEM_SERVICO ( 
 Num INT, 
@@ -175,12 +170,6 @@ CONSTRAINT PRIMARY KEY(Num),
 CONSTRAINT ord_servico_orcamento_fk FOREIGN KEY(Cod_orcamento) references ORCAMENTO(Cod),
 CONSTRAINT ord_servico_chamado_fk FOREIGN KEY(sequencial_chamado) references CHAMADO (Sequencial) 
 );
-
-ALTER TABLE ORCAMENTO
-	ADD CONSTRAINT orcamento_os_fk FOREIGN KEY(Num_OS) references ORDEM_SERVICO(Num);
-
-ALTER TABLE CHAMADO
-	ADD CONSTRAINT chamado_ordem_servico_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVICO(Num);
 
 CREATE TABLE ATENDE ( 
 Sequencial_chamado INT(11),  
@@ -379,14 +368,9 @@ Cod_categoria VARCHAR(20) NOT NULL,
 Mat_supervisor VARCHAR(13) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod),
 CONSTRAINT insumo_categoria_fk FOREIGN KEY(Cod_categoria) references CATEGORIA(Cod),
-CONSTRAINT insumo_supervisor_fk FOREIGN KEY(Mat_supervisor) references SUPERVISOR(matricula)
+CONSTRAINT insumo_supervisor_fk FOREIGN KEY(Mat_supervisor) references SUPERVISOR(matricula),
+CONSTRAINT insumo_solicita_fk FOREIGN KEY(Mat_supervisor) references SOLICITA(Mat_supervisor)
 );
-
-#tive que add esse alter table, pois insumo já tinha sido criada e não
-#havia uma chave estrangeira para solicita. Nõ consegui dropar INSUMO,
-#devido a suas relações já existentes.
-ALTER TABLE INSUMO
-	ADD CONSTRAINT insumo_solicita_fk FOREIGN KEY(Mat_supervisor) references SOLICITA(Mat_supervisor);
 
 CREATE TABLE INSUMO_USADO_SERVICO ( 
 Cod_Insumo VARCHAR(15), 
