@@ -29,7 +29,6 @@ CONSTRAINT PRIMARY KEY(Matricula_supervisor),
 CONSTRAINT FOREIGN KEY(Matricula_supervisor) REFERENCES SUPERVISOR (matricula) 
 );
 
-
 CREATE TABLE FUNCIONARIO (
 Matricula VARCHAR(13), 
 CPF BIGINT(11) NOT NULL UNIQUE, 
@@ -281,7 +280,7 @@ CONSTRAINT cliente_fis_cliente_fk FOREIGN KEY( Cod_cliente ) references CLIENTE(
 CREATE TABLE FATURA ( 
 Cod INT, 
 Num_parcelas INT NOT NULL,
-Valor_total INT NOT NULL, 
+Valor_total FLOAT(4,2) NOT NULL, 
 Status_ VARCHAR(30) NOT NULL, 
 Cod_cliente INT NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod), 

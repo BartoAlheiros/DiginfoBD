@@ -1,60 +1,60 @@
 INSERT INTO CLIENTE VALUES(122211,'Baixa',"P.O. Box 132, 5336 Tincidunt Street",'PE','nonummy.ipsum.non@Morbiaccumsan.com','81324556612');
 
-INSERT INTO CLIENTE VALUES(921567,'Media','Ap #506-9024 Semper St.','MS,tempus@purusmauris.net','81324556613');
+INSERT INTO CLIENTE VALUES(921567,'Media','Ap #506-9024 Semper St.','MS','tempus@purusmauris.net','81324556613');
 
 INSERT INTO CLIENTE VALUES(444272,'Baixa',"P.O. Box 683, 1827 Magna. Street",'SP','egestas.Duis.ac@nonvestibulumnec.ca','81324556614');
 
 INSERT INTO CLIENTE VALUES(419036,'Baixa','545-5308 Aliquam Rd.','BH','molestie.tellus.Aenean@etmagnisdis.com','81324556615');
 
-INSERT INTO CLIENTE VALUES(494738,'Media',"P.O. Box 852, 3735 Libero Avenue",TK,Aenean.euismod@estconguea.com,81324556616);
+INSERT INTO CLIENTE VALUES(494738,'Media',"P.O. Box 852, 3735 Libero Avenue",'TK','Aenean.euismod@estconguea.com','81324556616');
 
-INSERT INTO CLIENTE VALUES(468928,Baixa,"Ap #108-1456 Nec, Street",RU,sem.Nulla@facilisislorem.co.uk,81324556617);
+INSERT INTO CLIENTE VALUES(468928,'Alta',"Ap #108-1456 Nec, Street",'RU','sem.Nulla@facilisislorem.co.uk','81324556617');
 
-INSERT INTO CLIENTE VALUES(374702,Baixa,767-7067 Et Street,AL,pretium@sitametconsectetuer.net,81324556618);
+INSERT INTO CLIENTE VALUES(374702,'Baixa','767-7067 Et Street','AL','pretium@sitametconsectetuer.net','81324556618');
 
-INSERT INTO CLIENTE VALUES(421804,Media,"P.O. Box 228, 5687 Fermentum Street",CA,dictum@ettristiquepellentesque.co.uk,81324556619);
+INSERT INTO CLIENTE VALUES(421804,'Media',"P.O. Box 228, 5687 Fermentum Street",'CA','dictum@ettristiquepellentesque.co.uk','81324556619');
 
-INSERT INTO CLIENTE VALUES(754431,Alta,"9327 Sed, Road",AM,lobortis@interdumenim.ca,81324556620);
+INSERT INTO CLIENTE VALUES(754431,'Alta',"9327 Sed, Road",'AM','lobortis@interdumenim.ca','81324556620');
 
-INSERT INTO CLIENTE VALUES(546312,Media,"1128 Eget, Rd.",PA,Mauris.ut@nonjustoProin.com,81324556621);
+INSERT INTO CLIENTE VALUES(546312,'Media',"1128 Eget, Rd.",'PA','Mauris.ut@nonjustoProin.com','81324556621');
 
-INSERT INTO CLIENTE VALUES(690810,Baixa,Ap #428-6491 Curabitur Rd.,MG,at.pede.Cras@metus.co.uk,81324556622);
+INSERT INTO CLIENTE VALUES(690810,'Baixa','Ap #428-6491 Curabitur Rd.','MG','at.pede.Cras@metus.co.uk','81324556622');
 
-INSERT INTO CLIENTE VALUES(219478,Baixa,8048 Dui. Rd.,BL,Nunc.lectus@sed.edu,81324556623);
+INSERT INTO CLIENTE VALUES(219478,'Baixa','8048 Dui. Rd.','BL','Nunc.lectus@sed.edu','81324556623');
 
-INSERT INTO CLIENTE VALUES(143693,Media,9271 Donec Street,PC,sagittis.Duis@eleifendvitaeerat.net,81324556624);
+INSERT INTO CLIENTE VALUES(143693,'Media','9271 Donec Street','PC','sagittis.Duis@eleifendvitaeerat.net','81324556624');
 
-INSERT INTO CLIENTE VALUES(448803,Baixa,"P.O. Box 774, 5509 Felis. Street",CH,scelerisque.sed.sapien@arcu.com,81324556625);
+INSERT INTO CLIENTE VALUES(448803,'Baixa',"P.O. Box 774, 5509 Felis. Street",'AC','scelerisque.sed.sapien@arcu.com','81324556625');
 
-INSERT INTO CLIENTE VALUES(236843,Media,Ap #813-6435 Pellentesque Rd.,UR,Morbi.vehicula.Pellentesque@miDuisrisus.co.uk,81324556626);
+INSERT INTO CLIENTE VALUES(236843,'Media','Ap #813-6435 Pellentesque Rd.','UR','Morbi.vehicula.Pellentesque@miDuisrisus.co.uk','81324556626');
 
-INSERT INTO CLIENTE VALUES(333493,Baixa,419-1184 Justo. Rd.,PE,penatibus.et.magnis@vestibulum.edu,81324556627);
+INSERT INTO CLIENTE VALUES(333493,'Baixa','419-1184 Justo. Rd.','PE','penatibus.et.magnis@vestibulum.edu','81324556627');
 
-INSERT INTO CLIENTE VALUES(654214,Baixa,"P.O. Box 489, 5083 Mollis Rd.",MS,Phasellus.at@Aliquamornare.co.uk,81324556628);
+INSERT INTO CLIENTE VALUES(654214,'Baixa',"P.O. Box 489, 5083 Mollis Rd.",'MS','Phasellus.at@Aliquamornare.co.uk','81324556628');
 
-INSERT INTO CLIENTE VALUES(780419,Media,"7163 Orci, St.",SP,tristique.neque.venenatis@euaugueporttitor.edu,81324556629);
+INSERT INTO CLIENTE VALUES(780419,'Media',"7163 Orci, St.",'SP','tristique.neque.venenatis@euaugueporttitor.edu','81324556629');
 
-INSERT INTO CLIENTE VALUES(301898,Baixa,"Ap #264-2826 Montes, Av.",BH,at.velit.Pellentesque@Aeneansedpede.com,81324556630);
+INSERT INTO CLIENTE VALUES(301898,'Baixa',"Ap #264-2826 Montes, Av.",'BH','at.velit.Pellentesque@Aeneansedpede.com','81324556630');
 
-INSERT INTO CLIENTE VALUES(293827,Baixa,"P.O. Box 714, 4676 Magna. Avenue",TK,Duis@ultriciesdignissim.net,81324556631);
+INSERT INTO CLIENTE VALUES(293827,'Baixa',"P.O. Box 714, 4676 Magna. Avenue",'TK','Duis@ultriciesdignissim.net','81324556631');
 
-INSERT INTO CLIENTE VALUES(565384,Media,"2471 Vitae, Avenue",RU,eu.odio@mattissemperdui.com,81324556632);
+INSERT INTO CLIENTE VALUES(565384,'Media',"2471 Vitae, Avenue",'RU','eu.odio@mattissemperdui.com','81324556632');
 
-INSERT INTO CLIENTE VALUES(937976,Media,Ap #272-7973 Blandit Av.,AL,non@et.ca,81324556633);
+INSERT INTO CLIENTE VALUES(937976,'Media','Ap', '#272-7973 Blandit Av.,AL,non@et.ca','81324556633');
 
-INSERT INTO CLIENTE VALUES(596328,Baixa,"2813 A, Ave",CA,lacinia.orci@euelit.org,81324556634);
+INSERT INTO CLIENTE VALUES(596328,'Baixa',"2813 A, Ave",'CA','lacinia.orci@euelit.org','81324556634');
 
-INSERT INTO CLIENTE VALUES(237669,Baixa,469-6007 Non Ave,AM,elit.fermentum@molestiedapibusligula.ca,81324556635);
+INSERT INTO CLIENTE VALUES(237669,'Baixa','469-6007 Non Ave','AM','elit.fermentum@molestiedapibusligula.ca','81324556635');
 
-INSERT INTO CLIENTE VALUES(323110,Media,279-395 Ornare Avenue,PA,amet@eget.co.uk,81324556636);
+INSERT INTO CLIENTE VALUES(323110,'Media','279-395 Ornare Avenue','PA','amet@eget.co.uk','81324556636');
 
-INSERT INTO CLIENTE VALUES(570551,Baixa,Ap #478-5357 Venenatis Rd.,MG,nisi.a@aaliquet.ca,81324556637);
+INSERT INTO CLIENTE VALUES(570551,'Baixa','Ap #478-5357 Venenatis Rd.','MG','nisi.a@aaliquet.ca','81324556637');
 
-INSERT INTO CLIENTE VALUES(829521,Baixa,"P.O. Box 862, 6019 Proin Av.",BL,arcu.imperdiet.ullamcorper@pulvinararcu.net,81324556638);
+INSERT INTO CLIENTE VALUES(829521,'Baixa',"P.O. Box 862, 6019 Proin Av.",'BL','arcu.imperdiet.ullamcorper@pulvinararcu.net','81324556638');
 
-INSERT INTO CLIENTE VALUES(768352,Media,Ap #429-4302 Tempus Ave,PC,ut.ipsum.ac@vel.org,81324556639);
+INSERT INTO CLIENTE VALUES(768352,'Media','Ap #429-4302 Tempus Ave','PC','ut.ipsum.ac@vel.org','81324556639');
 
-INSERT INTO CLIENTE VALUES(959091,Alta,4081 Elit. Av.,PE,et@magna.edu,81324556640);
+INSERT INTO CLIENTE VALUES(959091,'Alta','4081 Elit. Av.','PE','et@magna.edu','81324556640');
 
 INSERT INTO CLIENTE VALUES(101468,Baixa,5161 Euismod St.,MS,tellus.eu.augue@faucibus.edu,81324556641);
 
