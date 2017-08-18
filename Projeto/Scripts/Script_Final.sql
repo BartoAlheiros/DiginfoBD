@@ -318,10 +318,10 @@ CONSTRAINT contrato_unidade_suporte_fk FOREIGN KEY (Cnpj_Unidade_suporte) refere
 CREATE TABLE EQUIPAMENTO(
 Cod VARCHAR(15),
 Data_entrada DATE NOT NULL,
-Setor VARCHAR(30) NOT NULL,
-historico VARCHAR(80) NOT NULL,
+Setor VARCHAR(50) NOT NULL,
+historico VARCHAR(1023) NOT NULL,
 Fabricante VARCHAR(20) NOT NULL,
-Estado VARCHAR(15) NOT NULL,
+Estado VARCHAR(30) NOT NULL,
 Cod_contrato VARCHAR(15) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod),
 CONSTRAINT Cod_contrato_fk FOREIGN KEY(Cod_contrato) references CONTRATO(Cod_contrato)
@@ -332,7 +332,7 @@ Num_ordem_servico INT,
 Cod_equipamento VARCHAR(15),
 CONSTRAINT PRIMARY KEY(Num_ordem_servico, Cod_equipamento),
 CONSTRAINT envolveu_os_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVICO(Num),
-CONSTRAINT envolve_equipamento_fk FOREIGN KEY ( Cod_equipamento ) references EQUIPAMENTO(Cod)
+CONSTRAINT envolveu_equipamento_fk FOREIGN KEY ( Cod_equipamento ) references EQUIPAMENTO(Cod)
 );
 
 CREATE TABLE PARCELA_PAGAMENTO ( 
