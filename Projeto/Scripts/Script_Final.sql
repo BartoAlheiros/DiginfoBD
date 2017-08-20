@@ -12,14 +12,22 @@ CONSTRAINT PRIMARY KEY(CNPJ)
 
 CREATE TABLE UNIDADE_DE_SUPORTE ( 
 Cod VARCHAR(15),
-CNPJ BIGINT(14) UNSIGNED, 
+CNPJ_empresa BIGINT(14) UNSIGNED, 
 Nro_funcionarios INT, 
 Nome VARCHAR(50) NOT NULL, 
 Matriz VARCHAR(20) NOT NULL, 
 endereco VARCHAR(50) NOT NULL UNIQUE,
 FONE VARCHAR(16) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod, CNPJ),
-CONSTRAINT fk_unid_suporte_empresa FOREIGN KEY(CNPJ) REFERENCES EMPRESA(CNPJ)
+CONSTRAINT fk_unid_suporte_empresa FOREIGN KEY(CNPJ_empresa) REFERENCES EMPRESA(CNPJ)
+);
+
+CREATE TABLE LOCALIZACAO (
+CNPJ BIGINT(14) UNSIGNED, 
+end_ VARCHAR(255) NOT NULL, 
+estado VARCHAR(80) NOT NULL,
+CONSTRAINT PRIMARY KEY(CNPJ, end_, estado),
+CONSTRAINT localizacao_unid_suport_fk FOREIGN KEY(CNPJ) REFERENCES UNIDADE_DE_SUPORTE (CNPJ_empresa)
 );
 
 CREATE TABLE SUPERVISIONA ( 
@@ -321,7 +329,7 @@ Data_entrada DATE NOT NULL,
 Setor VARCHAR(50) NOT NULL,
 historico VARCHAR(1023) NOT NULL,
 Fabricante VARCHAR(20) NOT NULL,
-Estado VARCHAR(30) NOT NULL,
+Estado VARCHAR(255) NOT NULL,
 Cod_contrato VARCHAR(15) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cod),
 CONSTRAINT Cod_contrato_fk FOREIGN KEY(Cod_contrato) references CONTRATO(Cod_contrato)
@@ -434,7 +442,7 @@ Cnpj_Fornecedor BIGINT(14),
 Cod_Insumo VARCHAR(15) NOT NULL,
 Data_inicio DATE NOT NULL,
 Data_fim DATE NOT NULL,
-Valor_unitario FLOAT(4,2) NOT NULL,
+Valor_unitario DECIMAL(6,2) NOT NULL,
 CONSTRAINT PRIMARY KEY(Cnpj_Fornecedor),
 CONSTRAINT Cnpj_Fornecedor_fk FOREIGN KEY(Cnpj_Fornecedor) references FORNECEDOR(Cnpj),
 CONSTRAINT Cod_Insumo_fk FOREIGN KEY(Cod_Insumo) references INSUMO(Cod)
@@ -442,7 +450,7 @@ CONSTRAINT Cod_Insumo_fk FOREIGN KEY(Cod_Insumo) references INSUMO(Cod)
 
 CREATE TABLE END_FORNECEDOR(
 Cnpj_Fornecedor BIGINT(14),
-Endereco VARCHAR(80),
+Endereco VARCHAR(255),
 CONSTRAINT PRIMARY KEY(Cnpj_Fornecedor, Endereco),
 CONSTRAINT end_fornecedor_fk FOREIGN KEY(Cnpj_Fornecedor) references FORNECEDOR(Cnpj)
 );
@@ -461,3 +469,4 @@ CONSTRAINT PRIMARY KEY(Sequencial, Cod_Insumo),
 CONSTRAINT item_estoque_insumo_fk FOREIGN KEY(Cod_Insumo) references INSUMO(Cod),
 CONSTRAINT item_estoque_almoxarifado_fk FOREIGN KEY(Id_almoxarifado) references ALMOXARIFADO(Id)
 );
+
