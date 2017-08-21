@@ -164,6 +164,15 @@ CONSTRAINT chamado_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod),
 CONSTRAINT chamado_ordem_servico_fk FOREIGN KEY(Num_ordem_servico) references ORDEM_SERVICO(Num)
 );
 
+CREATE TABLE CLIE_ABRE(
+Cod_chamado INT(11),
+Dta_Abertura Date NOT NULL,
+Cod_cliente	INT NOT NULL,
+CONSTRAINT PRIMARY KEY(Cod_chamado),
+CONSTRAINT clie_abre_chamado_fk FOREIGN KEY(Cod_chamado) REFERENCES CHAMADO(Cod),
+CONSTRAINT clie_abre_cliente_fk FOREIGN KEY(Cod_cliente) REFERENCES CLIENTE(Cod)
+);
+
 CREATE TABLE ORDEM_SERVICO ( 
 Num INT, 
 Data_devida DATE NOT NULL, 
