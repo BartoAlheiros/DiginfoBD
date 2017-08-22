@@ -1,8 +1,7 @@
-#selecionar o nome de cada unidade de suporte o endereço e o telefone
-SELECT Nome, endereco, FONE
-FROM UNIDADE_DE_SUPORTE;
-
-#mostrar quantas unidades de suporte cada empresa tem
-SELECT COUNT
-
-select * from clie_abre;
+#selecionar a matrícula, o nome do funcionario e o nome da unidade de suporte em que cada funcionário trabalha.
+SELECT f.Matricula, u.Nome as Nome_Unid_Suporte, f.Nome as Nome_Funcionario
+FROM
+	funcionario f JOIN unidade_de_suporte u
+    ON f.CNPJ = u.CNPJ_empresa;
+    
+    
