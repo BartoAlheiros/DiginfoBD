@@ -9,7 +9,6 @@ FIELDS ENCLOSED BY '\'' TERMINATED BY ';'
 ;
 
 
-select * from FUNCIONARIO;
-
+select * from atende;
 -- habilita de novo a checagem de restrições de chaves estrangeiras
 SET FOREIGN_KEY_CHECKS = 1;
